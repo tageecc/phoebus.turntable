@@ -73,8 +73,8 @@ router.get('/token', function (req, res, next) {
         method: 'get',
         url: _url + qs.stringify(params)
     };
-    request(options, function (err, res, body) {
-        if (!err && res.statusCode == 200) {
+    request(options, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
             var result = JSON.parse(body);
             res.redirect('/wechat/user/'+result.openid+"?access_token="+result.access_token);
         }
