@@ -76,23 +76,9 @@ router.get('/token', function (req, res, next) {
     request(options, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             var result = JSON.parse(body);
-            res.redirect('/wechat/user/'+result.openid+"?access_token="+result.access_token);
+            res.redirect('/login/user/' + result.openid + "?access_token=" + result.access_token);
         }
     })
 });
 
-router.get('/user/:openid', function (req, res, next) {
-    console.log(req.query.access_token)
-    var _url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token=' +
-        req.query.access_token +
-        '&openid=' +
-        req.params.openid +
-        '&lang=zh_CN';
-    request(_url, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
-            res.end(body);
-        }
-    })
-
-});
 module.exports = router;
