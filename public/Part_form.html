@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no"/>
+    <title></title>
+    <link rel="stylesheet" href="css/main.css"/>
+    <script src="js/jquery.min.js"></script>
+</head>
+<body>
+<div class="mask"></div>
+<div class="mask-content">
+    <header>
+        <h1>请先填写收货信息</h1>
+        <small>以下信息收集仅用于奖品发放便于联系，予以保密绝不外泄</small>
+    </header>
+    <section class="form">
+        <div class="block">
+            <label for="uname">姓名</label>
+            <input name="uname" id="uname" type="text"/>
+        </div>
+        <div class="block">
+            <label for="ugender">性别</label>
+
+            <div class="radio-box">
+                <span class="handler">女</span>
+                <input name="ugender" id="ugender" type="checkbox" value="female"/>
+            </div>
+        </div>
+        <div class="block">
+            <label for="ucell">手机号码</label>
+            <input name="ucell" id="ucell" type="number"/>
+        </div>
+        <div class="block">
+            <label for="uaddr">收货地址</label>
+            <input name="uaddr" id="uaddr" type="text"/>
+        </div>
+    </section>
+    <button class="btn error-btn" id="form_submit">提交，开始抽奖！</button>
+</div>
+<script>
+    $('#ugender').click(function () {
+        var checked = $(this).prop('checked');
+        if (checked) {
+            $(this).closest('.radio-box').addClass('checked');
+            $(this).closest('.radio-box').find('.handler').text('男');
+        } else {
+            $(this).closest('.radio-box').removeClass('checked');
+            $(this).closest('.radio-box').find('.handler').text('女');
+        }
+    });
+</script>
+<script>
+    $('#form_submit').click(function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: 'test',
+            method: 'POST',
+            dataType: 'json',
+            data: {
+                uname: $('#uname').val(),
+                ugender: $('#ugender').is(':checked') ? 'male' : 'female',
+                ucell: $('#ucell').val(),
+                uaddr: $('#uaddr').val()
+            }, success: function (data) {
+
+            }, error: function (err) {
+
+            }
+        })
+    });
+</script>
+</body>
+</html>
