@@ -1,11 +1,36 @@
 var express = require('express');
 var crypto = require('crypto');
 var request = require('request');
+var qs = require('querystring');
 var router = express.Router();
 
 var token = "phoebus4wechat";
 var appid = 'wxf532bce31a7c7715';
 var secret = '9ee6fc68d53c4d9e3ac8f2b58ed59b83';
+var g_access_token = {
+    str: getAccess_token(),
+    time: new Date().getTime()
+}
+function validateAccess_token(req, res, next) {
+    var _curentTime = new Date().getTime();
+    if ((_curentTime - access_token.time) / 1000 > 7200) {
+        access_token.str = getAccess_token();
+    }
+    next();
+}
+
+function getAccess_token() {
+    var _url = 'https://api.weixin.qq.com/cgi-bin/token?grant_type=client_credential&appid=' +
+        appid +
+        '&secret=' +
+        secret;
+    request(_url, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            return JSON.parse(body).access_token;
+        }
+    })
+}
+
 router.get('/', function (req, res, next) {
     var signature = req.query.signature;
     var timestamp = req.query.timestamp;
@@ -26,6 +51,7 @@ router.get('/', function (req, res, next) {
         res.send("error");
     }
 });
+
 router.get('/code', function (req, res, next) {
     var _url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' +
         appid +
@@ -36,17 +62,37 @@ router.get('/code', function (req, res, next) {
 });
 
 router.get('/token', function (req, res, next) {
-    var _url = 'https://api.weixin.qq.com/sns/oauth2/access_token?appid=' +
-        appid +
-        '&secret=' +
-        secret +
-        '&code=' +
-        req.query.code +
-        '&grant_type=authorization_code';
-    request(_url, function (error, response, body) {
-        if (!error && response.statusCode == 200) {
+    var _url = 'https://api.weixin.qq.com/sns/oauth2/access_token?';
+    var params = {
+        appid: appid,
+        secret: secret,
+        code: req.query.code,
+        grant_type: 'authorization_code'
+    };
+    var options = {
+        method: 'get',
+        url: _url + qs.stringify(params)
+    };
+    request(options, function (err, res, body) {
+        if (!err && res.statusCode == 200) {
             var result = JSON.parse(body);
+            res.redirect('/wechat/user/'+result.openid+"?access_token="+result.access_token);
         }
     })
+});
+
+router.get('/user/:openid', function (req, res, next) {
+    console.log(req.query.access_token)
+    var _url = 'https://api.weixin.qq.com/cgi-bin/user/info?access_token=' +
+        req.query.access_token +
+        '&openid=' +
+        req.params.openid +
+        '&lang=zh_CN';
+    request(_url, function (error, response, body) {
+        if (!error && response.statusCode == 200) {
+            res.end(body);
+        }
+    })
+
 });
 module.exports = router;
