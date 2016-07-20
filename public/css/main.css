@@ -3,6 +3,10 @@
     margin: 0;
 }
 
+html, body {
+    height: 100%;
+}
+
 body {
     font-family: 'Microsoft YaHei', 'Helvetica', sans-serif;
     font-size: 16px;
@@ -40,6 +44,87 @@ body {
 .btn.error-btn {
     background-color: #b9244d;
     border-bottom-color: #7e2e44;
+}
+
+/*第一页*/
+.main-bg {
+    width: 100%;
+    height: 100%;
+    background: url("../img/main-bg.png") no-repeat fixed;
+    background-size: 100% 100%;
+    position: relative;
+    z-index: -1;
+    overflow: hidden;
+}
+
+.host {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+}
+
+.host.host-1 {
+    z-index: 1;
+    background: url("../img/host-lw.png") no-repeat bottom center;
+    background-size: auto 100%;
+}
+
+.host.host-2 {
+    z-index: 2;
+    background: url("../img/host-fjy.png") no-repeat bottom center;
+    background-size: auto 100%;
+}
+
+.host.host-3 {
+    z-index: 3;
+    background: url("../img/explod-overlay.png") no-repeat bottom center;
+    background-size: auto 100%;
+}
+
+.host.host-4 {
+    z-index: 4;
+    background: url("../img/host-lwj.png") no-repeat bottom center;
+    background-size: auto 100%;
+}
+
+.main-bg .brand-logo {
+    width: 55%;
+    margin: 0 auto;
+    position: absolute;
+    z-index: 5;
+    left: 0;
+    right: 0;
+    bottom: 100px;
+}
+
+.main-bg .xydzp {
+    width: 50%;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    position: absolute;
+    z-index: 5;
+    bottom: 35px;
+}
+
+.main-bg .arrow-up {
+    position: absolute;
+    display: block;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    bottom: 40px;
+    z-index: 6;
+}
+
+.main-bg .turntable {
+    width: 80%;
+    margin: 0 auto;
+    left: 0;
+    right: 0;
+    position: absolute;
+    bottom: -300px;
+    z-index: 5;
 }
 
 /*单选框*/
