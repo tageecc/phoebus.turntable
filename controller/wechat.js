@@ -76,7 +76,7 @@ router.get('/token', function (req, res, next) {
     request(options, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             var result = JSON.parse(body);
-            res.redirect('/login/user/' + result.openid + "?access_token=" + result.access_token);
+            res.redirect('/user/' + result.openid + "?access_token=" + result.access_token);
         }
     })
 });
