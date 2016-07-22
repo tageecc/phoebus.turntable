@@ -257,7 +257,6 @@ section.form .block input[type=checkbox] {
     top: 0;
     z-index: 10;
     display: none;
-
 }
 
 .mask-content header {
@@ -275,6 +274,25 @@ section.form .block input[type=checkbox] {
     font-size: .4em;
     color: white;
     opacity: .8;
+}
+
+.mask-content [class^=info-] {
+    color: #ffffff;
+    width: 80%;
+    margin: 0 auto;
+}
+
+.mask-content .info-header {
+    font-size: 1em;
+}
+
+.mask-content .info-header:first-child {
+    margin-top: 100px;
+}
+
+.mask-content .info-para {
+    font-size: .8em;
+    opacity: .9;
 }
 
 section.form {
