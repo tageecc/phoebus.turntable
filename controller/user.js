@@ -55,7 +55,7 @@ router.post('/:openid', function (req, res, next) {
     User.update({openid: req.params.openid}, _data, function (err, user) {
         if (err) console.error(err);
         else {
-            res.end({code: 1, msg: '成功!'});
+            res.end(JSON.stringify({code: 1, msg: '成功!'}));
         }
     })
 });
@@ -70,20 +70,24 @@ router.get('/:openid/lottery', function (req, res, next) {
         }
         console.log(user)
         if(!user){
-            res.end({code: -53, msg: '用户不存在'});
+            res.end(JSON.stringify({code: -53, msg: '用户不存在'}));
             return;
         }
         if (user.lottery_number < 1) {
-            res.end({code: -3, msg: '无剩余抽奖次数，请明日再来！'});
+            res.end(JSON.stringify({code: -3, msg: '无剩余抽奖次数，请明日再来！'}));
             return;
         }
         if (user.winning_times > 0) {
-            res.end({code: -1, msg: '很遗憾未中奖！'});
+            res.end(JSON.stringify(JSON.stringify({code: -1, msg: '很遗憾未中奖！'})));
             return;
         }
         Prize.find({}, function (err, prizes) {
             if (err) {
                 console.error(err);
+                return;
+            }
+            if(!prizes||prizes.length<1){
+                res.end(JSON.stringify({code: -1, msg: '很遗憾未中奖！'}));
                 return;
             }
             prizes.forEach(function (v, i) {
@@ -99,16 +103,18 @@ router.get('/:openid/lottery', function (req, res, next) {
                                 return;
                             }
                             else {
-                                res.end({
+                                res.end(JSON.stringify({
                                     code: 1,
                                     msg: '恭喜你，获得' + v.level + '等奖',
                                     data: {prizeName: v.name, token: _token}
-                                });
+                                }));
+                                console.log('恭喜你，获得' + v.level + '等奖');
                                 return;
                             }
                         })
                     }else{
-                        res.end({code: -1, msg: '很遗憾未中奖！'});
+                        res.end(JSON.stringify({code: -1, msg: '很遗憾未中奖！'}));
+                        console.log('很遗憾未中奖！');
                         return;
                     }
                 }
