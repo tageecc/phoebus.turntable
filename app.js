@@ -2,14 +2,16 @@ var express = require('express');
 var path = require('path');
 var favicon = require('serve-favicon');
 var logger = require('morgan');
+var mongoose = require('mongoose');
 var session = require('express-session');
 var mongoose = require('mongoose');
 var MongoStore = require('connect-mongo')(session);//把会话信息存储在数据库
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var dburl = require('./config/dburl');
 var cronJob = require("cron").CronJob;
 
-mongoose.connect('mongodb://localhost/phoebus_turntable');//连接mongodb数据库
+mongoose.connect(dburl.dbUrl);//连接mongodb数据库
 
 var app = express();
 
@@ -23,19 +25,20 @@ app.use(logger('dev'));
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended: false}));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, 'public')));
 
 //提供会话支持，设置 store 参数为 MongoStore 实例，把会话信息存储到数据库中
-// app.use(session({
-//     secret: 'phoebus@turntable',
-//     store: new MongoStore({
-//         url: 'mongodb://localhost/phoebus_turntable',
-//         collection: 'sessions',
-//         cookie: { maxAge: 1000*60*60*3}
-//     }),
-//     resave: false,
-//     saveUninitialized: true
-// }));
+app.use(session({
+    secret: dburl.cookieSecret,
+    store: new MongoStore({
+        url: dburl.dbUrl,
+        collection: 'sessions'
+    }),
+    resave: false,
+    saveUninitialized: true
+}));
+
+app.use(express.static(path.join(__dirname, 'public')));
+
 
 //定时更新数据库
 //在每天的6:00执行
@@ -45,10 +48,9 @@ new cronJob('* 0 6 * * *', function () {
     console.log('============== 更新数据库完成！ ==============')
 }, null, true, 'Asia/Shanghai');
 
-app.use('/', require('./controller/index'));
+app.use('/admin', require('./controller/admin'));
 app.use('/wechat', require('./controller/wechat'));
 app.use('/user', require('./controller/user'));
-app.use('/test', require('./controller/test'));
 
 
 // catch 404 and forward to error handler

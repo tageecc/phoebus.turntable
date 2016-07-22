@@ -1,7 +1,8 @@
 var mongoose = require('mongoose');
-
+var Schema = mongoose.Schema
+var ObjectId = Schema.Types.ObjectId
 var WinnerSchema = new mongoose.Schema({
-    openid: String,
+    user: {type:ObjectId,ref:'User'},
     prize: {type: ObjectId, ref: 'Prize'},//奖品
     create_at: {
         type: Date,
