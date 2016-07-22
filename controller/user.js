@@ -10,7 +10,6 @@ var router = express.Router();
 var token = "phoebus4wechat";
 
 router.get('/', function (req, res, next) {
-
 });
 router.get('/:openid', function (req, res, next) {
     var _url = 'https://api.weixin.qq.com/sns/userinfo?access_token=' +
@@ -34,7 +33,8 @@ router.get('/:openid', function (req, res, next) {
                             console.log(err);
                         }
                         else {
-                            res.redirect('/index.html');
+                            console.log('index',openid)
+                            res.render('index',{openid:result.openid});
                         }
                     })
                 }
@@ -46,11 +46,12 @@ router.get('/:openid', function (req, res, next) {
 
 router.post('/:openid', function (req, res, next) {
     var _data = {
-        username: req.query.uname,
-        sex: req.query.ugender,
-        phone: req.query.ucell,
-        address: req.query.uaddr
+        username: req.body.uname,
+        sex: req.body.ugender,
+        phone: req.body.ucell,
+        address: req.body.uaddr
     }
+    console.log(_data)
     User.update({openid: req.params.openid}, _data, function (err, user) {
         if (err) console.error(err);
         else {
@@ -61,10 +62,15 @@ router.post('/:openid', function (req, res, next) {
 
 router.get('/:openid/lottery', function (req, res, next) {
     var _openid = req.params.openid
-
+    console.log(_openid);
     User.findOne({openid: _openid}, function (err, user) {
         if (err) {
             console.error(err);
+            return;
+        }
+        console.log(user)
+        if(!user){
+            res.end({code: -53, msg: '用户不存在'});
             return;
         }
         if (user.lottery_number < 1) {
@@ -101,6 +107,9 @@ router.get('/:openid/lottery', function (req, res, next) {
                                 return;
                             }
                         })
+                    }else{
+                        res.end({code: -1, msg: '很遗憾未中奖！'});
+                        return;
                     }
                 }
             })
