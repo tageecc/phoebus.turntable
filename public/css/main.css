@@ -57,10 +57,16 @@ body {
     overflow: hidden;
 }
 
+.main-bg.bg-2 {
+    background: url("../img/main-bg-2.png") no-repeat fixed;
+    background-size: 100% 100%;
+}
+
 .host {
     width: 100%;
     height: 100%;
     position: absolute;
+    top: 0;
 }
 
 .host.host-1 {
@@ -71,14 +77,14 @@ body {
 
 .host.host-2 {
     z-index: 2;
-    background: url("../img/host-fjy.png") no-repeat bottom center;
+    background: url("../img/host-fjy2.png") no-repeat bottom center;
     background-size: auto 100%;
 }
 
 .host.host-3 {
     z-index: 3;
     background: url("../img/explod-overlay.png") no-repeat bottom center;
-    background-size: auto 100%;
+    background-size: 100% 100%;
 }
 
 .host.host-4 {
@@ -115,6 +121,10 @@ body {
     right: 0;
     bottom: 40px;
     z-index: 6;
+    -webkit-animation-name: seduce;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-duration: 2s;
+    -webkit-animation-timing-function: ease-in;
 }
 
 .main-bg .turntable {
@@ -127,6 +137,61 @@ body {
     z-index: 5;
 }
 
+/*第二页*/
+.turntable-container {
+    width: 100%;
+    position: absolute;
+    top: 0;
+}
+
+.fixed-bg {
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+}
+
+.xydzp-2 {
+    width: 85%;
+    position: absolute;
+    top: 10px;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    z-index: 1;
+}
+
+.turntable-cursor,
+.turntable-bottom {
+    width: 80%;
+    display: block;
+    margin: 0 auto;
+    position: absolute;
+    left: 0;
+    right: 0;
+    z-index: 2;
+    top: 170px;
+}
+
+.turntable-cursor {
+    z-index: 3;
+}
+
+.turntable-container .candidate {
+    width: 100%;
+    display: block;
+    position: absolute;
+    top: -20px;
+    z-index: 1;
+}
+
+.lucky {
+    width: 100%;
+    position: absolute;
+    bottom: 20px;
+    z-index: 9;
+}
+
 /*单选框*/
 
 .radio-box {
@@ -135,11 +200,11 @@ body {
     border-radius: 4px;
     background-color: #b9244d;
     position: relative;
-    transition: all .3s
+    -webkit-transition: all .3s
 }
 
 .radio-box * {
-    transition: all .3s
+    -webkit-transition: all .3s
 }
 
 .radio-box.checked {
@@ -181,13 +246,23 @@ section.form .block input[type=checkbox] {
     left: 0;
     background-color: #000000;
     opacity: .8;
-    z-index: -1;
+    z-index: 9;
+    display: none;
 }
 
 /*登记表单*/
+.mask-content {
+    position: absolute;
+    width: 100%;
+    top: 0;
+    z-index: 10;
+    display: none;
+
+}
+
 .mask-content header {
     width: 80%;
-    margin: 40px auto;
+    margin: 30px auto;
 }
 
 .mask-content header h1 {
@@ -225,4 +300,57 @@ section.form .block input[type=number] {
     border: 0;
     border-radius: 4px;
     padding: 10px 5px;
+}
+
+.turning {
+    -webkit-animation: turning;
+    -webkit-animation-iteration-count: infinite;
+    -webkit-animation-duration: 2s;
+}
+
+@-webkit-keyframes seduce {
+    0% {
+        bottom: 30px;
+    }
+    50% {
+        bottom: 50px;
+    }
+    100% {
+        bottom: 30px;
+    }
+}
+
+@keyframes turning {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    50% {
+        -webkit-transform: rotate(720deg);
+    }
+    100% {
+        -webkit-transform: rotate(0deg);
+    }
+}
+
+@-webkit-keyframes turning {
+    0% {
+        -webkit-transform: rotate(0deg);
+    }
+    50% {
+        -webkit-transform: rotate(720deg);
+    }
+    100% {
+        -webkit-transform: rotate(0deg);
+    }
+}
+
+.turning.prize-1 {
+    -webkit-animation-name: prize-1;
+    -webkit-animation-iteration-count: 1;
+}
+
+@-webkit-keyframes prize-1 {
+    100% {
+        -webkit-transform: rotate(-22.5deg);
+    }
 }

@@ -3,10 +3,163 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title></title>
-    <link rel="stylesheet" href="css/style.css">
+    <title>放肆去美丽，美妆CS</title>
+    <link rel="stylesheet" href="css/main.css"/>
+    <link rel="stylesheet" href="css/jquery.fullPage.css"/>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.fullPage.js"></script>
 </head>
 <body>
-TEST IMPORT
+<div id="fullpage">
+    <div class="section main-bg" data-anchor="one">
+        <!--主持人部分-->
+        <div class="host host-1"></div>
+        <div class="host host-2"></div>
+        <div class="host host-3"></div>
+        <div class="host host-4"></div>
+        <!--LOGO部分-->
+        <img class="brand-logo" src="img/brand-logo.png"/>
+        <img class="arrow-up" src="img/arrow-up.png"/>
+        <img class="xydzp" src="img/xydzp.png"/>
+        <img class="turntable" src="img/turntable-bottom.png"/>
+    </div>
+    <div class="section main-bg" data-anchor="two">
+        <img class="fixed-bg" data-src="img/main-bg-2.png"/>
+        <img class="xydzp-2" data-src="img/xydzp.png"/>
+
+        <div class="turntable-container">
+            <img class="turntable-cursor" data-src="img/turntable-cursor.png"/>
+            <img class="turntable-bottom" id="zhuanpan" src="img/turntable-bottom.png"/>
+
+        </div>
+        <div class="turntable-container">
+            <img class="candidate" data-src="img/candidate-bg1.png" alt=""/>
+            <img class="candidate" data-src="img/candidate-bg2.png" alt=""/>
+        </div>
+        <div class="lucky">
+            <button class="btn warning-btn" id="lucky_begin">开始抽奖！</button>
+        </div>
+    </div>
+</div>
+<div class="mask"></div>
+<div class="mask-content" id="information">
+
+</div>
+<div class="mask-content" id="user_form">
+    <header>
+        <h1>请先填写收货信息</h1>
+        <small>以下信息收集仅用于奖品发放便于联系，予以保密绝不外泄</small>
+    </header>
+    <section class="form">
+        <div class="block">
+            <label for="uname">姓名</label>
+            <input name="uname" id="uname" type="text"/>
+        </div>
+        <div class="block">
+            <label for="ugender">性别</label>
+
+            <div class="radio-box">
+                <span class="handler">女</span>
+                <input name="ugender" id="ugender" type="checkbox" value="female"/>
+            </div>
+        </div>
+        <div class="block">
+            <label for="ucell">手机号码</label>
+            <input name="ucell" id="ucell" type="number"/>
+        </div>
+        <div class="block">
+            <label for="uaddr">收货地址</label>
+            <input name="uaddr" id="uaddr" type="text"/>
+        </div>
+    </section>
+    <button class="btn error-btn" id="form_submit">提交，开始抽奖！</button>
+</div>
+<script>
+    $(document).ready(function () {
+        localStorage.clear();
+
+        $('#fullpage').fullpage({
+            anchors: ['one', 'two'],
+            css3: true,
+            scrollingSpeed: 500,
+
+            onLeave: function (index, nextIndex, direction) {
+                if (index == 1 && direction == "down") {
+                    console.log(true);
+                    var isFirstViewed = !!localStorage.getItem('isFirstViewed');
+                    if (!isFirstViewed) {
+                        localStorage.setItem('isFirstViewed', 'true');
+                        setTimeout(function () {
+                            $('.mask').show();
+                            $('#user_form').show();
+                        }, 400);
+                    }
+                }
+            }
+        });
+    });
+    $('#ugender').click(function () {
+        var checked = $(this).prop('checked');
+        if (checked) {
+            $(this).closest('.radio-box').addClass('checked');
+            $(this).closest('.radio-box').find('.handler').text('男');
+        } else {
+            $(this).closest('.radio-box').removeClass('checked');
+            $(this).closest('.radio-box').find('.handler').text('女');
+        }
+    });
+    $('#form_submit').click(function (e) {
+        e.preventDefault();
+        $.ajax({
+            url: 'test',
+            method: 'POST',
+            dataType: 'json',
+            data: {
+                uname: $('#uname').val(),
+                ugender: $('#ugender').is(':checked') ? 'male' : 'female',
+                ucell: $('#ucell').val(),
+                uaddr: $('#uaddr').val()
+            }, success: function (data) {
+                $('.mask').trigger('click');
+            }, error: function (err) {
+
+            }
+        })
+    });
+
+    $('.mask').click(function (e) {
+        e.preventDefault();
+        $(this).hide();
+        $('.mask-content').hide();
+    });
+
+    $('#lucky_begin').click(function (e) {
+        e.preventDefault();
+        $('.turntable-bottom').addClass('turning');
+        $.ajax({
+            url: "js/getLucky.json",
+            dataType: 'json',
+            success: function (data) {
+                setTimeout(function () {
+                    switch (data.prize) {
+                        case"1":
+                            $('.turntable-bottom').addClass('prize-1');
+                            break;
+                        case "2":
+                            $('.turntable-bottom').addClass('prize-2');
+                            break;
+                        case "3":
+                            $('.turntable-bottom').addClass('prize-3');
+                            break;
+                        case "na":
+                            $('.turntable-bottom').addClass('no-prize');
+                            break;
+                    }
+                }, 4000);
+
+            }
+        })
+    })
+</script>
 </body>
 </html>
