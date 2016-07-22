@@ -73,12 +73,21 @@ body {
     z-index: 1;
     background: url("../img/host-lw.png") no-repeat bottom center;
     background-size: auto 100%;
+    -webkit-transform: translate(-1000px);
+    -webkit-animation-name: lw-entrance;
+    -webkit-animation-duration: .5s;
+    -webkit-animation-fill-mode: forwards;
 }
 
 .host.host-2 {
     z-index: 2;
     background: url("../img/host-fjy2.png") no-repeat bottom center;
     background-size: auto 100%;
+    -webkit-transform: translate(1000px);
+    -webkit-animation-name: fjy-entrance;
+    -webkit-animation-duration: .5s;
+    -webkit-animation-delay: .2s;
+    -webkit-animation-fill-mode: forwards;
 }
 
 .host.host-3 {
@@ -91,6 +100,11 @@ body {
     z-index: 4;
     background: url("../img/host-lwj.png") no-repeat bottom center;
     background-size: auto 100%;
+    -webkit-transform: translateY(1000px);
+    -webkit-animation-name: lwj-entrance;
+    -webkit-animation-duration: .5s;
+    -webkit-animation-delay: .4s;
+    -webkit-animation-fill-mode: forwards;
 }
 
 .main-bg .brand-logo {
@@ -295,6 +309,99 @@ section.form .block input[type=checkbox] {
     opacity: .9;
 }
 
+.mask-content .prize-header {
+    text-align: center;
+    font-size: 1.3em;
+    color: #ffffff;
+    margin: 50px auto 30px;
+}
+
+.prize-header #prize_name {
+    font-size: 2em;
+    margin: 0 8px;
+}
+
+.mask-content .glowing-container {
+    width: 400px;
+    max-width: 100%;
+    height: 310px;
+    margin: 0 auto;
+    position: relative;
+    text-align: center;
+}
+
+.mask-content .glowing {
+    width: 300px;
+    height: 300px;
+    position: absolute;
+    z-index: 1;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+    max-height: 300px;
+    background: url("../img/glowing.png") no-repeat center center;
+    background-size: 100% 100%;
+    -webkit-animation: glow-turning;
+    -webkit-animation-duration: 60s;
+    -webkit-animation-iteration-count: infinite;
+}
+
+.mask-content .the-code {
+    color: #ffffff;
+    text-align: center;
+}
+
+.the-code h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.the-code .code {
+    line-height: 2em;
+    font-size: 1em;
+    display: block;
+    width: 200px;
+    text-align: center;
+    border: 1px solid #dedede;
+    background-color: #ffffff;
+    color: #000000;
+    margin: 0 auto;
+}
+
+.glowing-container img {
+    position: absolute;
+    width: 300px;
+    z-index: 2;
+    display: block;
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+}
+
+@-webkit-keyframes glow-turning {
+    0% {
+        -webkit-transform: rotate(0deg);
+        opacity: .9;
+    }
+    100% {
+        -webkit-transform: rotate(360deg);
+        opacity: 1;
+    }
+}
+
+.mask-content .follow {
+    width: 100%;
+    line-height: 3em;
+    font-size: 1em;
+    background-color: #b9244d;
+    color: #ffffff;
+    text-decoration: none;
+    position: fixed;
+    bottom: 0;
+    display: block;
+    text-align: center;
+}
+
 section.form {
     width: 80%;
     margin: 0 auto 40px;
@@ -370,5 +477,59 @@ section.form .block input[type=number] {
 @-webkit-keyframes prize-1 {
     100% {
         -webkit-transform: rotate(-22.5deg);
+    }
+}
+
+@-webkit-keyframes lw-entrance {
+    0% {
+        -webkit-transform: translate(-1000px);
+    }
+    100% {
+        -webkit-transform: translate(0);
+    }
+}
+
+@keyframes lw-entrance {
+    0% {
+        -webkit-transform: translate(-1000px);
+    }
+    100% {
+        -webkit-transform: translate(0);
+    }
+}
+
+@-webkit-keyframes fjy-entrance {
+    0% {
+        -webkit-transform: translate(1000px);
+    }
+    100% {
+        -webkit-transform: translate(0);
+    }
+}
+
+@keyframes fjy-entrance {
+    0% {
+        -webkit-transform: translate(1000px);
+    }
+    100% {
+        -webkit-transform: translate(0);
+    }
+}
+
+@-webkit-keyframes lwj-entrance {
+    0% {
+        -webkit-transform: translateY(1000px);
+    }
+    100% {
+        -webkit-transform: translateY(0);
+    }
+}
+
+@keyframes lwj-entrance {
+    0% {
+        -webkit-transform: translateY(1000px);
+    }
+    100% {
+        -webkit-transform: translateY(0);
     }
 }
