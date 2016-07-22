@@ -12,19 +12,6 @@ function adminRequired(req, res, next) {
     next()
 };
 
-router.post('/add', function (req, res, next) {
-    var _username = req.body.username;
-    var _password = req.body.password;
-    console.log(_username, _password)
-    Admin.create({name: _username, passwd: _password}, function (err, admin) {
-        console.log(arguments)
-        if (err) {
-            console.error(err);
-            return;
-        }
-    })
-});
-
 router.post('/login', function (req, res, next) {
     var _username = req.body.username;
     var _password = req.body.password;
@@ -36,12 +23,11 @@ router.post('/login', function (req, res, next) {
             return;
         }
         if (admin) {
-            console.log(111)
             req.session.admin = admin;
             console.log("req.session.admin:" + req.session.admin)
             res.redirect('/admin.html');
         } else {
-            console.log(222)
+            req.session.admin = null;
             res.render('error', {msg: '用户名或密码错误！'});
         }
     })
@@ -62,10 +48,10 @@ router.get('/winner-list', adminRequired, function (req, res, next) {
 
 router.post('/set-prize', adminRequired, function (req, res, next) {
     var _data = {
-        name: req.query.name,
-        level: req.query.level,
-        probability: req.query.probability,
-        num: req.query.num
+        name: req.body.name,
+        level: req.body.level,
+        probability: req.body.probability,
+        num: req.body.num
     }
     Prize.create(_data, function (err) {
         if (err) {

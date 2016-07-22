@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+<form action="/admin/set-prize" method="post">
+    name: req.query.name,
+    level: req.query.level,
+    probability: req.query.probability,
+    num: req.query.num
+    <input type="text" name="name">
+    <input type="text" name="level">
+    <input type="text" name="probability">
+    <input type="text" name="num">
+    <input type="submit" value="submit">
+</form>
+</body>
+</html>
