@@ -3,8 +3,74 @@
 <head>
     <meta charset="UTF-8">
     <title>admin</title>
+    <link rel="stylesheet" href="css/theme.css"/>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
 </head>
 <body>
+<div class="container-fluid">
+    <div class="row-fluid">
+        <div class="span1">
+        </div>
+        <div class="span10">
+            <div class="page-header">
+                <h1>
+                    后台信息管理
+                </h1>
+            </div>
 
+            <div class="tabbable tabs-left" id="tabs-674900">
+                <ul class="nav nav-tabs">
+                    <li class="active">
+                        <a data-toggle="tab" href="#panel-287723">设置奖品</a>
+                    </li>
+                    <li>
+                        <a data-toggle="tab" href="#panel-136528">中奖名单</a>
+                    </li>
+                </ul>
+                <div class="tab-content">
+                    <div class="tab-pane active" id="panel-287723">
+                        <form class="form-horizontal" method="post" action="/admin/set-prize">
+                            <div class="control-group">
+                                <label class="control-label" for="name">奖品名称</label>
+                                <div class="controls">
+                                    <input id="name" name="name" type="text" />
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="level">奖品等级</label>
+                                <div class="controls">
+                                    <input id="level" name="level" type="text"/>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="probability">奖品概率</label>
+                                <div class="controls">
+                                    <input id="probability" name="probability" type="text"/>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <label class="control-label" for="num">奖品数量</label>
+                                <div class="controls">
+                                    <input id="num" name="num" type="text"/>
+                                </div>
+                            </div>
+                            <div class="control-group">
+                                <div class="controls">
+                                    <button class="btn" type="submit">提交</button>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                    <div class="tab-pane" id="panel-136528">
+                        <p>
+                            第二部分内容.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
