@@ -1,4 +1,4 @@
-var User = require('../model/user');
+var Model = require('../model/model');
 
 module.exports = function () {
     var _data = {
@@ -6,7 +6,7 @@ module.exports = function () {
         winning_times: 0
     }
 
-    User.update({}, {"$unset": _data}, {multi: true}, function (err, user) {
+    Model.User.update({}, {"$set": _data}, {multi: true}, function (err, user) {
         if (err) console.error(err);
         else {
             console.log('============ 更新成功！============');
