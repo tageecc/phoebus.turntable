@@ -13,6 +13,13 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
+.css {
+    -webkit-transform: translate3d(0, 0, 0);
+    -moz-transform: translate3d(0, 0, 0);
+    -ms-transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0);
+}
+
 /*按钮部分*/
 .btn {
     width: 80%;
@@ -50,7 +57,7 @@ body {
 .main-bg {
     width: 100%;
     height: 100%;
-    background: url("../img/main-bg.png") no-repeat fixed;
+    background: url("http://oaqy0fx2b.bkt.clouddn.com/main-bg.png") no-repeat fixed;
     background-size: 100% 100%;
     position: relative;
     z-index: -1;
@@ -58,7 +65,7 @@ body {
 }
 
 .main-bg.bg-2 {
-    background: url("../img/main-bg-2.png") no-repeat fixed;
+    background: url("http://oaqy0fx2b.bkt.clouddn.com/main-bg-2.png") no-repeat fixed;
     background-size: 100% 100%;
 }
 
@@ -71,7 +78,7 @@ body {
 
 .host.host-1 {
     z-index: 1;
-    background: url("../img/host-lw.png") no-repeat bottom center;
+    background: url("http://oaqy0fx2b.bkt.clouddn.com/host-lw.png") no-repeat bottom center;
     background-size: auto 100%;
     -webkit-transform: translate(-1000px);
     -webkit-animation-name: lw-entrance;
@@ -81,7 +88,7 @@ body {
 
 .host.host-2 {
     z-index: 2;
-    background: url("../img/host-fjy2.png") no-repeat bottom center;
+    background: url('http://oaqy0fx2b.bkt.clouddn.com/host-fjy2.png') no-repeat bottom center;
     background-size: auto 100%;
     -webkit-transform: translate(1000px);
     -webkit-animation-name: fjy-entrance;
@@ -92,13 +99,13 @@ body {
 
 .host.host-3 {
     z-index: 3;
-    background: url("../img/explod-overlay.png") no-repeat bottom center;
+    background: url("http://oaqy0fx2b.bkt.clouddn.com/explod-overlay.png") no-repeat bottom center;
     background-size: 100% 100%;
 }
 
 .host.host-4 {
     z-index: 4;
-    background: url("../img/host-lwj.png") no-repeat bottom center;
+    background: url("http://oaqy0fx2b.bkt.clouddn.com/host-lwj.png") no-repeat bottom center;
     background-size: auto 100%;
     -webkit-transform: translateY(1000px);
     -webkit-animation-name: lwj-entrance;
@@ -115,6 +122,23 @@ body {
     left: 0;
     right: 0;
     bottom: 100px;
+    -webkit-animation-name: logo-entrance;
+    -webkit-animation-fill-mode: forwards;
+    -webkit-animation-duration: .5s;
+    -webkit-animation-delay: 1.1s;
+    opacity: 0;
+    -webkit-transform: scale(10);
+}
+
+@-webkit-keyframes logo-entrance {
+    0% {
+        opacity: 0;
+        -webkit-transform: scale(10);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: scale(1);
+    }
 }
 
 .main-bg .xydzp {
@@ -124,7 +148,23 @@ body {
     right: 0;
     position: absolute;
     z-index: 5;
-    bottom: 35px;
+    bottom: 100px;
+    -webkit-animation-name: xydzp-entrance;
+    -webkit-animation-fill-mode: forwards;
+    -webkit-animation-delay: 1.6s;
+    -webkit-animation-duration: .5s;
+    opacity: 0;
+}
+
+@-webkit-keyframes xydzp-entrance {
+    0% {
+        opacity: 1;
+        -webkit-transform: translateY(220px);
+    }
+    100% {
+        opacity: 1;
+        -webkit-transform: translateY(80px);
+    }
 }
 
 .main-bg .arrow-up {
@@ -142,7 +182,7 @@ body {
 }
 
 .main-bg .turntable {
-    width: 80%;
+    width: 100%;
     margin: 0 auto;
     left: 0;
     right: 0;
@@ -322,7 +362,7 @@ section.form .block input[type=checkbox] {
 }
 
 .mask-content .info-header:first-child {
-    margin-top: 100px;
+    margin-top: 40px;
 }
 
 .mask-content .info-para {
@@ -360,7 +400,7 @@ section.form .block input[type=checkbox] {
     right: 0;
     margin: 0 auto;
     max-height: 300px;
-    background: url("../img/glowing.png") no-repeat center center;
+    background: url("http://oaqy0fx2b.bkt.clouddn.com/glowing.png") no-repeat center center;
     background-size: 100% 100%;
     -webkit-animation: glow-turning;
     -webkit-animation-duration: 60s;
