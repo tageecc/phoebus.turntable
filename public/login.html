@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <title>管理员登陆页</title>
     <link rel="stylesheet" href="css/theme.css"/>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/js.md5.js"></script>
 </head>
 <body>
 <div class="container-fluid">
@@ -23,17 +25,19 @@
                         </p>
 
                     </div>
-                    <form class="form-horizontal" action="/admin/login" method="post">
+                    <form class="form-horizontal" action="/admin/login" method="post" onsubmit="md5()">
                         <div class="control-group">
                             <label class="control-label" for="inputEmail">用户名</label>
+
                             <div class="controls">
-                                <input id="inputEmail" name="username" type="text" />
+                                <input id="inputEmail" name="username" type="text"/>
                             </div>
                         </div>
                         <div class="control-group">
                             <label class="control-label" for="inputPassword">密码</label>
+
                             <div class="controls">
-                                <input id="inputPassword" type="password" name="password" />
+                                <input id="inputPassword" type="password" name="password"/>
                             </div>
                         </div>
                         <div class="control-group">
@@ -49,5 +53,12 @@
         </div>
     </div>
 </div>
+<script>
+    function md5() {
+        var password = $('#inputPassword').val();
+        var encrypt = $.md5(password);
+        $('#inputPassword').val(encrypt);
+    }
+</script>
 </body>
 </html>

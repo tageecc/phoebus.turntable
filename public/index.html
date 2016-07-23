@@ -184,9 +184,9 @@
                 ucell: $('#ucell').val(),
                 uaddr: $('#uaddr').val()
             }, success: function (data) {
-                $('.mask').trigger('click').show();
-                $('#prize_block').show();
                 localStorage.setItem('userSaved', 'true');
+                $('.mask').trigger('click');
+                $('#lucky_begin').trigger('click');
             }, error: function (err) {
 
             }
@@ -210,54 +210,67 @@
         $('#information').show();
     });
 
+    function userInfoModelShow() {
+        $('.mask').trigger('click')
+                .show();
+        $('#user_form').show();
+    }
+
     $('#lucky_begin').click(function (e) {
         e.preventDefault();
-        $('#zhuanpan').removeAttr('style');
-        $.ajax({
-            url: "/user/" + $('#openid').val() + "/lottery",
-            success: function (data) {
-                data = JSON.parse(data);
-                var random = Math.floor(Math.random() * 2);
-                if (data.code < 0) {
-                    $('#zhuanpan').css('-webkit-transform', 'rotate(' + (3600 - (random ? 292.5 : 157.5)) + 'deg)');
-                    $('#winner').hide();
-                    $('.the-code').hide();
-                    $('#loser').show();
-                    getInfo(false);
-                } else {
-                    var obj = data.data;
-                    switch (obj.prize) {
-                        case 1:
-                            $('#zhuanpan').css('-webkit-transform', 'rotate(' + (3600 - 22.5) + 'deg)');
-                            $('#winner').show();
-                            $('.the-code').show();
-                            $('#loser').hide();
-                            $('#prize_name').text('一');
-                            $('#get_number').text(data.data.token);
-                            break;
-                        case 2:
-                            $('#zhuanpan').css('-webkit-transform', 'rotate(' + (3600 - (random ? 67.5 : 202.5)) + 'deg)');
-                            $('#winner').show();
-                            $('.the-code').show();
-                            $('#loser').hide();
-                            $('#get_number').text(data.data.token);
-                            $('#prize_name').text('二');
-                            break;
-                        case 3:
-                            $('#zhuanpan').css('-webkit-transform', 'rotate(' + (3600 - (random ? 112.5 : 247.5)) + 'deg)');
-                            $('#winner').show();
-                            $('.the-code').show();
-                            $('#loser').hide();
-                            $('#get_number').text(data.data.token);
-                            $('#prize_name').text('三');
-                            break;
+
+        var userSaved = !!localStorage.getItem('userSaved');
+        if (!userSaved) {
+            //如果用户没输入过信息
+            userInfoModelShow();
+        } else {
+            //这时候转盘开始转
+            $.ajax({
+                url: "/user/" + $('#openid').val() + "/lottery",
+                success: function (data) {
+                    data = JSON.parse(data);
+                    var random = Math.floor(Math.random() * 2);
+                    if (data.code < 0) {
+                        $('#zhuanpan').css('-webkit-transform', 'rotate(' + (3600 - (random ? 292.5 : 157.5)) + 'deg)');
+                        setTimeout(function () {
+                            alert(data.msg);
+                        }, 5200);
+                    } else if (data.code == 1){
+                        var obj = data.data;
+                        switch (obj.prize) {
+                            case 1:
+                                $('#zhuanpan').css('-webkit-transform', 'rotate(' + (3600 - 22.5) + 'deg)');
+                                $('#winner').show();
+                                $('.the-code').show();
+                                $('#loser').hide();
+                                $('#prize_name').text('一');
+                                $('#get_number').text(data.data.token);
+                                break;
+                            case 2:
+                                $('#zhuanpan').css('-webkit-transform', 'rotate(' + (3600 - (random ? 67.5 : 202.5)) + 'deg)');
+                                $('#winner').show();
+                                $('.the-code').show();
+                                $('#loser').hide();
+                                $('#get_number').text(data.data.token);
+                                $('#prize_name').text('二');
+                                break;
+                            case 3:
+                                $('#zhuanpan').css('-webkit-transform', 'rotate(' + (3600 - (random ? 112.5 : 247.5)) + 'deg)');
+                                $('#winner').show();
+                                $('.the-code').show();
+                                $('#loser').hide();
+                                $('#get_number').text(data.data.token);
+                                $('#prize_name').text('三');
+                                break;
+                        }
                     }
-                    getInfo(true);
+                }, error: function (err) {
+                    alert(err.toString())
                 }
-            }, error: function (err) {
-                alert(err.toString())
-            }
-        })
+            })
+        }
+        $('#zhuanpan').removeAttr('style');
+
     });
 
     function getInfo(want) {
