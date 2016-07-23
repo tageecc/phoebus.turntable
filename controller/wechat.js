@@ -57,7 +57,7 @@ router.get('/code', function (req, res, next) {
     var _url = 'https://open.weixin.qq.com/connect/oauth2/authorize?appid=' +
         appid +
         '&redirect_uri=' +
-        encodeURIComponent('http://phoebus.diviniti.cn/wechat/token') +
+        encodeURIComponent('http://cs.diviniti.cn/wechat/token') +
         '&response_type=code&scope=snsapi_userinfo&state=STATE#wechat_redirect';
     res.redirect(_url);
 });

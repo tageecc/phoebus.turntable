@@ -16,7 +16,12 @@
             <div class="page-header">
                 <h1>
                     后台信息管理
+                    <small id="join_num">
+                        ...
+                </small>
                 </h1>
+
+
             </div>
 
             <div class="tabbable tabs-left" id="tabs-674900">
@@ -188,7 +193,15 @@
             }
         })
     });
+    setInterval(function () {
+        $.get('/admin/join-game', function (result) {
+            result = JSON.parse(result);
+            if (/^[1-9]+[0-9]*]*$/.test(result.num)) {
+                $('#join_num').html("实时活动参与人数:<b>" + result.num + "</b>");
+            }
+        })
 
+    }, 3000)
 </script>
 </body>
 </html>
