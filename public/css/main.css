@@ -185,6 +185,11 @@ body {
     right: 0;
     z-index: 2;
     top: 170px;
+    -webkit-transition: all 5s;
+    -moz-transition: all 5s;
+    -ms-transition: all 5s;
+    -o-transition: all 5s;
+    transition: all 5s;
 }
 
 .turntable-cursor {
@@ -202,8 +207,24 @@ body {
 .lucky {
     width: 100%;
     position: absolute;
+    bottom: 60px;
+    z-index: 9;
+}
+
+.link {
+    width: 100%;
+    position: absolute;
     bottom: 20px;
     z-index: 9;
+    text-align: center;
+    color: #ffffff;
+}
+
+.link a {
+    color: inherit;
+    font-size: .8em;
+    text-decoration: none;
+    opacity: .7;
 }
 
 /*单选框*/
@@ -313,7 +334,7 @@ section.form .block input[type=checkbox] {
     text-align: center;
     font-size: 1.3em;
     color: #ffffff;
-    margin: 50px auto 30px;
+    margin: 30px auto 10px;
 }
 
 .prize-header #prize_name {
