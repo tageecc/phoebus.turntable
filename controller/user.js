@@ -73,7 +73,7 @@ router.get('/:openid/lottery', function (req, res, next) {
             return;
         }
         if (user.winning_times > 0) {
-            res.end(JSON.stringify({code: -1, msg: '很遗憾未中奖！2'}));
+            res.end(JSON.stringify({code: -1, msg: '很遗憾未中奖！'}));
             return;
         }
         Model.Prize.find({}, function (err, prizes) {
@@ -82,7 +82,7 @@ router.get('/:openid/lottery', function (req, res, next) {
                 return;
             }
             if (!prizes || prizes.length < 1) {
-                res.end({code: -1, msg: '很遗憾未中奖！3'});
+                res.end({code: -1, msg: '很遗憾未中奖！'});
                 return;
             }
             var isWinner = false;
