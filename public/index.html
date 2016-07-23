@@ -37,13 +37,13 @@
 
         <div class="turntable-container">
             <img class="turntable-cursor css" data-src="http://oaqy0fx2b.bkt.clouddn.com/turntable-cursor.png"/>
-            <img class="turntable-bottom css" id="zhuanpan"
+            <img class="turntable-bottom" id="zhuanpan"
                  src="http://oaqy0fx2b.bkt.clouddn.com/turntable-bottom.png"/>
 
         </div>
         <div class="turntable-container">
             <img class="candidate css" data-src="http://oaqy0fx2b.bkt.clouddn.com/candidate-bg1.png" alt=""/>
-            <img class="candidate" data-src="http://oaqy0fx2b.bkt.clouddn.com/candidate-bg2.png" alt=""/>
+            <img class="candidate css" data-src="http://oaqy0fx2b.bkt.clouddn.com/candidate-bg2.png" alt=""/>
         </div>
         <div class="lucky">
             <button class="btn warning-btn" id="lucky_begin">开始抽奖！</button>
@@ -126,11 +126,9 @@
 
     <h1 class="prize-header" id="winner">恭喜你！获得<span id="prize_name">一</span>等奖</h1>
 
-    <h1 class="prize-header" id="loser" style="display: none">很遗憾~</h1>
-
     <div class="glowing-container">
         <div class="glowing"></div>
-        <img id="#prize-img" src=""/>
+        <img id="prize_img" src=""/>
     </div>
     <div class="the-code">
         <h3>长按复制您的兑奖券</h3>
@@ -139,14 +137,26 @@
     <a class="follow" href="#">兑奖请先关注我们</a>
 </div>
 <script>
+    var date = new Date();
+    var DATEKEY = date.getFullYear() + '' + (date.getMonth() + 1) + '' + date.getDate();
+    if (!localStorage.getItem(DATEKEY)) {
+        console.log('init');
+        localStorage.setItem(DATEKEY, 0);
+    }
+
+
+    var LUCKY_TIMES;
+    function getLuckyTimes() {
+        return Number(localStorage.getItem(DATEKEY));
+    }
+    function setLuckyTimes(times) {
+        localStorage.setItem(DATEKEY, times);
+    }
     $(document).ready(function () {
         sessionStorage.clear();
 
         var width = $('.turntable').css('width').split('px')[0];
         $('.turntable').css('bottom', (30 - width) + 'px');
-
-//        TODO 发布时这句话删掉
-//        localStorage.clear();
 
         $('#fullpage').fullpage({
             anchors: ['one', 'two'],
@@ -194,7 +204,8 @@
                 uaddr: $('#uaddr').val()
             }, success: function (data) {
                 localStorage.setItem('userSaved', 'true');
-                $('.mask').trigger('click');
+                $('.mask').hide();
+                $('.mask-content').hide();
                 $('#lucky_begin').trigger('click');
             }, error: function (err) {
 
@@ -202,15 +213,10 @@
         })
     });
 
-    $('.mask').click(function (e) {
-        e.preventDefault();
-        $(this).hide();
-        $('.mask-content').hide();
-    });
-
     $('#information').click(function (e) {
         e.preventDefault();
-        $('.mask').trigger('click');
+        $('.mask').hide();
+        $('#information').hide();
     });
 
     $('#trigger_info').click(function (e) {
@@ -220,86 +226,96 @@
     });
 
     function userInfoModelShow() {
-        $('.mask').trigger('click')
-                .show();
+        $('.mask').show();
+        $('.mask-content').hide();
         $('#user_form').show();
     }
+    var clickable = true;
 
     $('#lucky_begin').click(function (e) {
         e.preventDefault();
-        sessionStorage.setItem('times', (sessionStorage.getItem('times') ? Number(sessionStorage.getItem('times')) + 1 : 1));
-        if (Number(sessionStorage.getItem('times')) == 2) {
-            $('#lucky_begin').attr('disabled', true).text('今日次数已用完，请明天再来');
-        }
 
-        var userSaved = !!localStorage.getItem('userSaved');
-        if (!userSaved) {
-            //如果用户没输入过信息
-            userInfoModelShow();
-        } else {
-            //这时候转盘开始转
-            $.ajax({
-                url: "/user/" + $('#openid').val() + "/lottery",
-                success: function (data) {
-//                    alert(data);
+        if (clickable && getLuckyTimes() < 2) {
+            console.log('in');
+            clickable = false;
+            setLuckyTimes(Number(getLuckyTimes()) + 1);
 
-//                    data = JSON.parse(data);
-                    var random = Math.floor(Math.random() * 2);
-                    $('#zhuanpan').on('webkitAnimationEnd', function () {
-                        var type = $(this).data('type');
-                        if (type == '-1') {
-                            alert(data.msg);
-                        }
-                    });
-                    if (data.code < 0) {
-                        $('#zhuanpan').css('-webkit-transition', 'all 5s').css('-webkit-transform', 'rotate(' + ( 3600 - (random ? 292.5 : 157.5)) + 'deg)')
-                                .attr('data-type', '-1');
-                    } else if (data.code == 1) {
-                        var obj = data.data;
-                        switch (obj.prize) {
-                            case 1:
-                                $('#zhuanpan').css('-webkit-transition', 'all 5s').css('-webkit-transform', 'rotate(' + (3600 - 22.5) + 'deg)').attr('data-type', '1');
-                                $('#prize_name').text('一');
-                                break;
-                            case 2:
-                                $('#zhuanpan')
-                                        .css('-webkit-transition', 'all 5s').css('-webkit-transform', 'rotate(' + (3600 - (random ? 67.5 : 202.5)) + 'deg)').attr('data-type', '2');
-                                $('#prize_name').text('二');
-                                break;
-                            case 3:
-                                $('#zhuanpan').css('-webkit-transition', 'all 5s').css('-webkit-transform', 'rotate(' + (3600 - (random ? 112.5 : 247.5)) + 'deg)').attr('data-type', '3');
-                                $('#prize_name').text('三');
-                                break;
-                        }
-                        $('#winner').show();
-                        $('.the-code').show();
-                        $('#loser').hide();
-                        $('#get_number').text(data.data.token);
-                    }
-                }, error: function (err) {
-                    alert(err.toString())
-                }
-            })
-        }
-        $('#zhuanpan').removeAttr('style');
-
-    });
-
-    function getInfo(want) {
-        setTimeout(function () {
             var userSaved = !!localStorage.getItem('userSaved');
-            $('.mask').show();
-            if (userSaved) {
-                $('#prize_block').show();
+            if (!userSaved) {
+                //如果用户没输入过信息
+                userInfoModelShow();
+                clickable = true;
+                setLuckyTimes(Number(getLuckyTimes()) - 1);
             } else {
-                if (want) {
-                    $('#user_form').show();
-                } else {
-                    $('#prize_block').show();
-                }
+                //这时候转盘开始转
+                $.ajax({
+                    url: "/user/" + $('#openid').val() + "/lottery",
+                    success: function (data) {
+
+                        data = JSON.parse(data);
+                        var during_time = 1;
+                        var angle = {
+                            "-1": [157.5, 292.5],
+                            "1": [22.5],
+                            "2": [67.5, 202.5],
+                            "3": [112.5, 247.5, 337.5]
+                        };
+
+                        var targetAngle,
+                                randomCircle = Math.ceil(Math.random() * 6),
+                                rotateAngle = 0;
+                        var randomFlag = !randomCircle && true;
+
+                        if (data.code == -1) {
+                            targetAngle = angle[data.code][Math.floor(Math.random() * angle[data.code].length)];
+                            rotateAngle = rotateAngle - randomCircle * 360 * (randomFlag ? 2 : 10) - targetAngle - rotateAngle % 360;
+                            console.log(rotateAngle);
+
+                            $('#zhuanpan').css({
+                                'transform': 'rotate(' + rotateAngle + 'deg)',
+                                '-ms-transform': 'rotate(' + rotateAngle + 'deg)',
+                                '-webkit-transform': 'rotate(' + rotateAngle + 'deg)',
+                                '-moz-transform': 'rotate(' + rotateAngle + 'deg)',
+                                '-o-transform': 'rotate(' + rotateAngle + 'deg)',
+                                'transition': 'transform ease-out ' + during_time + 's',
+                                '-moz-transition': '-moz-transform ease-out ' + during_time + 's',
+                                '-webkit-transition': '-webkit-transform ease-out ' + during_time + 's',
+                                '-o-transition': '-o-transform ease-out ' + during_time + 's'
+                            });
+                            setTimeout(function () {
+                                alert(data.msg);
+                                clickable = true;
+                            }, (during_time + 0.2) * 1000);
+
+                        } else {
+                            targetAngle = angle[data.data.prize][Math.floor(Math.random() * angle[data.data.prize].length)];
+                            rotateAngle = 0 - randomCircle * 360 * (randomFlag ? 5 : 10) - targetAngle - rotateAngle % 360;
+
+                            $('#zhuanpan').css({
+                                'transform': 'rotate(' + rotateAngle + 'deg)',
+                                '-ms-transform': 'rotate(' + rotateAngle + 'deg)',
+                                '-webkit-transform': 'rotate(' + rotateAngle + 'deg)',
+                                '-moz-transform': 'rotate(' + rotateAngle + 'deg)',
+                                '-o-transform': 'rotate(' + rotateAngle + 'deg)',
+                                'transition': 'transform ease-out ' + during_time + 's',
+                                '-moz-transition': '-moz-transform ease-out ' + during_time + 's',
+                                '-webkit-transition': '-webkit-transform ease-out ' + during_time + 's',
+                                '-o-transition': '-o-transform ease-out ' + during_time + 's'
+                            });
+
+                            setTimeout(function () {
+                                clickable = true;
+                            }, (during_time + 0.2) * 1000);
+                        }
+                    }, error: function (err) {
+                        alert(err.toString())
+                    }
+                })
             }
-        }, 5200)
-    }
+        } else if (getLuckyTimes() >= 2) {
+            $('#lucky_begin').text('今日次数已用完，请明天再来')
+        }
+    });
 </script>
 </body>
 </html>
