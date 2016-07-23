@@ -379,6 +379,8 @@ section.form .block input[type=checkbox] {
 
 .prize-header #prize_name {
     font-size: 2em;
+    position: relative;
+    top: .1em;
     margin: 0 8px;
 }
 

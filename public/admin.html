@@ -25,6 +25,9 @@
                         <a data-toggle="tab" href="#panel-287723">设置奖品</a>
                     </li>
                     <li>
+                        <a data-toggle="tab" href="#panel-136529">奖品状态</a>
+                    </li>
+                    <li>
                         <a data-toggle="tab" href="#panel-136528">中奖名单</a>
                     </li>
                 </ul>
@@ -33,26 +36,30 @@
                         <form class="form-horizontal" method="post" action="/admin/set-prize">
                             <div class="control-group">
                                 <label class="control-label" for="name">奖品名称</label>
+
                                 <div class="controls">
-                                    <input id="name" name="name" type="text" />
+                                    <input id="name" name="name" type="text" required/>
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label" for="level">奖品等级</label>
+
                                 <div class="controls">
-                                    <input id="level" name="level" type="text"/>
+                                    <input id="level" name="level" type="text" required/>
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label" for="probability">奖品概率</label>
+
                                 <div class="controls">
-                                    <input id="probability" name="probability" type="text"/>
+                                    <input id="probability" name="probability" type="text" required/>
                                 </div>
                             </div>
                             <div class="control-group">
                                 <label class="control-label" for="num">奖品数量</label>
+
                                 <div class="controls">
-                                    <input id="num" name="num" type="text"/>
+                                    <input id="num" name="num" type="text" required/>
                                 </div>
                             </div>
                             <div class="control-group">
@@ -62,9 +69,14 @@
                             </div>
                         </form>
                     </div>
+                    <div class="tab-pane" id="panel-136529">
+                        <p>
+                            奖品状态表
+                        </p>
+                    </div>
                     <div class="tab-pane" id="panel-136528">
                         <p>
-                            第二部分内容.
+                            中奖者名单
                         </p>
                     </div>
                 </div>
@@ -72,5 +84,103 @@
         </div>
     </div>
 </div>
+<script>
+    var row = $('<tr>');
+    var header = $('<th>');
+    var cell = $('<td>');
+
+    $.ajax({
+        //获取奖品状态表
+        url: 'admin/prize-list',
+        success: function (data) {
+            var obj = JSON.parse(data);
+
+            var prizeTable = $('<table>');
+            $(prizeTable).addClass('table');
+            var headerRow = $(row).clone();
+            ['奖品名称', '奖品等级', '奖品概率', '奖品数量'].map(function (name, index) {
+                $(headerRow).append(
+                        $(header).clone().text(name)
+                )
+            });
+
+            $(prizeTable).append(headerRow);
+
+            obj.map(function (prize, index) {
+                var prizeRow = $(row).clone();
+                $(prizeRow).append(
+                        $(cell).clone().text(prize.name)
+                ).append(
+                        $(cell).clone().text(prize.level)
+                ).append(
+                        $(cell).clone().text(prize.probability)
+                ).append(
+                        $(cell).clone().text(prize.num)
+                );
+
+                $(prizeTable).append(prizeRow);
+            });
+
+            $('#panel-136529').append(prizeTable);
+        }
+    });
+    $.ajax({
+        //获取中奖名单表
+        url: 'admin/winner-list',
+        success: function (data) {
+            var obj = JSON.parse(data);
+            console.log(obj);
+
+            var winnerTable = $('<table>');
+            $(winnerTable).addClass('table');
+            var headerRow = $(row).clone();
+            ['姓名', '性别', '电话', '地址', '奖品名称', '奖品等级', '兑奖码', '中奖时间'].map(function (name, index) {
+                $(headerRow).append(
+                        $(header).clone().text(name)
+                )
+            });
+
+            $(winnerTable).append(headerRow);
+
+            obj.map(function (prize, index) {
+
+                var prizeRow = $(row).clone();
+
+                var date = new Date(prize.create_at);
+
+                $(prizeRow).append(
+                        $(cell).clone().text(prize.user.username)
+                ).append(
+                        $(cell).clone().text(prize.user.sex)
+                ).append(
+                        $(cell).clone().text(prize.user.phone)
+                ).append(
+                        $(cell).clone().text(prize.user.address)
+                ).append(
+                        $(cell).clone().text(prize.prize.name)
+                ).append(
+                        $(cell).clone().text(prize.prize.level)
+                ).append(
+                        $(cell).clone().text(prize.token)
+                ).append(
+                        $(cell).clone().text(
+                                date.getFullYear() + '/' +
+                                (date.getMonth() + 1) + '/' +
+                                date.getDate() + ' ' +
+                                date.getHours() + ':' +
+                                date.getMinutes() + ':' +
+                                date.getSeconds()
+                        )
+                );
+
+                $(winnerTable).append(prizeRow);
+            });
+
+            $('#panel-136528').append(winnerTable)
+                    .append($('<a>').clone().attr('href', 'admin/winner-file')
+                            .text('下载CVS'));
+        }
+    })
+</script>
 </body>
 </html>
