@@ -65,9 +65,9 @@ router.get('/winner-file', adminRequired, function (req, res, next) {
                 var data = [];
                 winners.map(function (v, i) {
                     var date = new Date(v.create_at);
-
+                    var date_str=date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + ' ' + date.getHours() + ':' + date.getMinutes() + ':' + date.getMinutes();
                     data.push({
-                        '中奖时间': date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + ' ' + (date.getHours() + 1) + ':' + date.getMinutes() + ':' + date.getMinutes(),
+                        '中奖时间': date_str,
                         'token': v.token,
                         '姓名': v.user.username,
                         '性别': v.user.sex,
