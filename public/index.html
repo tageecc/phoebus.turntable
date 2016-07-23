@@ -184,7 +184,8 @@
                 ucell: $('#ucell').val(),
                 uaddr: $('#uaddr').val()
             }, success: function (data) {
-                $('.mask').trigger('click');
+                $('.mask').trigger('click').show();
+                $('#prize_block').show();
                 localStorage.setItem('userSaved', 'true');
             }, error: function (err) {
 
@@ -214,19 +215,19 @@
         $('#zhuanpan').removeAttr('style');
         $.ajax({
             url: "/user/" + $('#openid').val() + "/lottery",
-            dataType: 'json',
             success: function (data) {
+                data = JSON.parse(data);
                 var random = Math.floor(Math.random() * 2);
-                console.log(data.code, typeof data.code);
                 if (data.code < 0) {
                     $('#zhuanpan').css('-webkit-transform', 'rotate(' + (3600 - (random ? 292.5 : 157.5)) + 'deg)');
                     $('#winner').hide();
                     $('.the-code').hide();
                     $('#loser').show();
-                    getInfo();
+                    getInfo(false);
                 } else {
-                    switch (data.data.prize) {
-                        case "1":
+                    var obj = data.data;
+                    switch (obj.prize) {
+                        case 1:
                             $('#zhuanpan').css('-webkit-transform', 'rotate(' + (3600 - 22.5) + 'deg)');
                             $('#winner').show();
                             $('.the-code').show();
@@ -234,7 +235,7 @@
                             $('#prize_name').text('一');
                             $('#get_number').text(data.data.token);
                             break;
-                        case "2":
+                        case 2:
                             $('#zhuanpan').css('-webkit-transform', 'rotate(' + (3600 - (random ? 67.5 : 202.5)) + 'deg)');
                             $('#winner').show();
                             $('.the-code').show();
@@ -242,7 +243,7 @@
                             $('#get_number').text(data.data.token);
                             $('#prize_name').text('二');
                             break;
-                        case "3":
+                        case 3:
                             $('#zhuanpan').css('-webkit-transform', 'rotate(' + (3600 - (random ? 112.5 : 247.5)) + 'deg)');
                             $('#winner').show();
                             $('.the-code').show();
@@ -251,20 +252,26 @@
                             $('#prize_name').text('三');
                             break;
                     }
-                    getInfo();
+                    getInfo(true);
                 }
+            }, error: function (err) {
+                alert(err.toString())
             }
         })
     });
 
-    function getInfo() {
+    function getInfo(want) {
         setTimeout(function () {
             var userSaved = !!localStorage.getItem('userSaved');
             $('.mask').show();
             if (userSaved) {
                 $('#prize_block').show();
             } else {
-                $('#user_form').show();
+                if (want) {
+                    $('#user_form').show();
+                } else {
+                    $('#prize_block').show();
+                }
             }
         }, 5200)
     }
