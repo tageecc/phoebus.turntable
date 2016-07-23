@@ -43,8 +43,8 @@ app.use(express.static(path.join(__dirname, 'public')));
 //定时更新数据库
 //在每天的6:00执行
 new cronJob('* 0 6 * * *', function () {
-    console.log('==============时间：'+new Date().getHours()+'更新数据库... ==============')
-    (require('./util/update'))();
+    console.log('==============时间：' + new Date().getHours() + ':' + new Date().getMinutes() + '更新数据库... ==============')
+    require('./util/update')();
     console.log('============== 更新数据库完成！ ==============')
 }, null, true, 'Asia/Shanghai');
 
