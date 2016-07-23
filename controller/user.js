@@ -88,7 +88,7 @@ router.get('/:openid/lottery', function (req, res, next) {
             var isWinner = false;
             for (var i in prizes) {
                 var v = prizes[i];
-                if (!isWinner && v.num > 0 && Math.floor(Math.random() * 1000) < v.probability) {
+                if (!isWinner && v.num > 0 && Math.floor(Math.random() * 10000) < v.probability) {
                     var _token = util.randomString(10);
                     res.end(JSON.stringify({
                         code: 1,
