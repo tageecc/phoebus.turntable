@@ -21,6 +21,7 @@
     "crypto": "^0.0.3",
     "ejs-mate": "^2.3.0",
     "express-session": "^1.14.0",
+    "json2csv": "^3.6.2",
     "mongoose": "^4.5.4",
     "npm": "^3.10.5",
     "querystring": "^0.2.0",

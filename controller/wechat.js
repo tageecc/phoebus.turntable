@@ -82,7 +82,7 @@ router.get('/token', function (req, res, next) {
             Model.User.findOne({openid: result.openid}, function (err, user) {
                 if (err) console.error(err);
                 if (!user) {
-                    User.create({
+                    Model.User.create({
                         openid: result.openid,
                     }, function (err) {
                         if (err) {
