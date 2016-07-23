@@ -11,6 +11,12 @@
 </head>
 <body>
 <input id="openid" type="hidden" value="<%=openid %>">
+<script>
+    var openid = $('#openid').val();
+    if (openid.match(/<%=openid %>/g)) {
+        location.href = 'wechat/code';
+    }
+</script>
 
 <div id="fullpage">
     <div class="section main-bg" data-anchor="one">
@@ -235,7 +241,7 @@
                         setTimeout(function () {
                             alert(data.msg);
                         }, 5200);
-                    } else if (data.code == 1){
+                    } else if (data.code == 1) {
                         var obj = data.data;
                         switch (obj.prize) {
                             case 1:
