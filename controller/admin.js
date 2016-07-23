@@ -119,4 +119,14 @@ router.post('/set-prize', adminRequired, function (req, res, next) {
     })
 });
 
+router.post('/join-game', adminRequired, function (req, res, next) {
+    Model.User.count({}, function (err, count) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        res.end(JSON.stringify({num: count}));
+    })
+});
+
 module.exports = router;
