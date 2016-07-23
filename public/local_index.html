@@ -10,7 +10,13 @@
     <script src="js/jquery.fullPage.js"></script>
 </head>
 <body>
-<input id="openid" type="hidden" value="<%=openid %>">
+<input id="openid" type="hidden" value="oN4DqvpeK6rNYahXXaocSlXoyqCc">
+<script>
+    //    var openid = $('#openid').val();
+    //    if (openid.match(/<%=openid %>/g)) {
+    //        location.href = 'wechat/code';
+    //    }
+</script>
 
 <div id="fullpage">
     <div class="section main-bg" data-anchor="one">
@@ -20,18 +26,18 @@
         <div class="host host-3 "></div>
         <div class="host host-4 "></div>
         <!--LOGO部分-->
-        <img class="brand-logo css" src="http://oaqy0fx2b.bkt.clouddn.com/brand-logo.png"/>
-        <img class="arrow-up css" src="http://oaqy0fx2b.bkt.clouddn.com/arrow-up.png"/>
-        <img class="xydzp css" src="http://oaqy0fx2b.bkt.clouddn.com/xydzp.png"/>
-        <img class="turntable css" src="http://oaqy0fx2b.bkt.clouddn.com/turntable-bottom.png"/>
+        <img class="brand-logo" src="http://oaqy0fx2b.bkt.clouddn.com/brand-logo.png"/>
+        <img class="arrow-up" src="http://oaqy0fx2b.bkt.clouddn.com/arrow-up.png"/>
+        <img class="xydzp" src="http://oaqy0fx2b.bkt.clouddn.com/xydzp.png"/>
+        <img class="turntable" src="http://oaqy0fx2b.bkt.clouddn.com/turntable-bottom.png"/>
     </div>
     <div class="section main-bg css" data-anchor="two">
-        <img class="fixed-bg" data-src="/img/main-bg-2.png"/>
-        <img class="xydzp-2" data-src="/img/xydzp.png"/>
+        <img class="fixed-bg" data-src="img/main-bg-2.png"/>
+        <img class="xydzp-2" data-src="img/xydzp.png"/>
 
         <div class="turntable-container">
             <img class="turntable-cursor css" data-src="http://oaqy0fx2b.bkt.clouddn.com/turntable-cursor.png"/>
-            <img class="turntable-bottom css" id="zhuanpan"
+            <img class="turntable-bottom" id="zhuanpan"
                  src="http://oaqy0fx2b.bkt.clouddn.com/turntable-bottom.png"/>
 
         </div>
@@ -134,11 +140,13 @@
 </div>
 <script>
     $(document).ready(function () {
+        sessionStorage.clear();
+
         var width = $('.turntable').css('width').split('px')[0];
         $('.turntable').css('bottom', (30 - width) + 'px');
 
-        //TODO 发布时这句话删掉
-        localStorage.clear();
+//        TODO 发布时这句话删掉
+//        localStorage.clear();
 
         $('#fullpage').fullpage({
             anchors: ['one', 'two'],
@@ -172,6 +180,7 @@
             $(this).closest('.radio-box').find('.handler').text('女');
         }
     });
+
     $('#form_submit').click(function (e) {
         e.preventDefault();
         $.ajax({
@@ -184,8 +193,9 @@
                 ucell: $('#ucell').val(),
                 uaddr: $('#uaddr').val()
             }, success: function (data) {
-                $('.mask').trigger('click');
                 localStorage.setItem('userSaved', 'true');
+                $('.mask').trigger('click');
+                $('#lucky_begin').trigger('click');
             }, error: function (err) {
 
             }
@@ -201,7 +211,7 @@
     $('#information').click(function (e) {
         e.preventDefault();
         $('.mask').trigger('click');
-    })
+    });
 
     $('#trigger_info').click(function (e) {
         e.preventDefault();
@@ -209,62 +219,85 @@
         $('#information').show();
     });
 
+    function userInfoModelShow() {
+        $('.mask').trigger('click')
+                .show();
+        $('#user_form').show();
+    }
+
     $('#lucky_begin').click(function (e) {
         e.preventDefault();
-        $('#zhuanpan').removeAttr('style');
-        $.ajax({
-            url: "/user/" + $('#openid').val() + "/lottery",
-            dataType: 'json',
-            success: function (data) {
-                var random = Math.floor(Math.random() * 2);
-                console.log(data.code, typeof data.code);
-                if (data.code < 0) {
-                    $('#zhuanpan').css('-webkit-transform', 'rotate(' + (3600 - (random ? 292.5 : 157.5)) + 'deg)');
-                    $('#winner').hide();
-                    $('.the-code').hide();
-                    $('#loser').show();
-                    getInfo();
-                } else {
-                    switch (data.data.prize) {
-                        case "1":
-                            $('#zhuanpan').css('-webkit-transform', 'rotate(' + (3600 - 22.5) + 'deg)');
-                            $('#winner').show();
-                            $('.the-code').show();
-                            $('#loser').hide();
-                            $('#prize_name').text('一');
-                            $('#get_number').text(data.data.token);
-                            break;
-                        case "2":
-                            $('#zhuanpan').css('-webkit-transform', 'rotate(' + (3600 - (random ? 67.5 : 202.5)) + 'deg)');
-                            $('#winner').show();
-                            $('.the-code').show();
-                            $('#loser').hide();
-                            $('#get_number').text(data.data.token);
-                            $('#prize_name').text('二');
-                            break;
-                        case "3":
-                            $('#zhuanpan').css('-webkit-transform', 'rotate(' + (3600 - (random ? 112.5 : 247.5)) + 'deg)');
-                            $('#winner').show();
-                            $('.the-code').show();
-                            $('#loser').hide();
-                            $('#get_number').text(data.data.token);
-                            $('#prize_name').text('三');
-                            break;
+        sessionStorage.setItem('times', (sessionStorage.getItem('times') ? Number(sessionStorage.getItem('times')) + 1 : 1));
+        if (Number(sessionStorage.getItem('times')) == 2) {
+//            $('#lucky_begin').attr('disabled', true).text('今日次数已用完，请明天再来');
+        }
+
+        var userSaved = !!localStorage.getItem('userSaved');
+        if (!userSaved) {
+            //如果用户没输入过信息
+            userInfoModelShow();
+        } else {
+            //这时候转盘开始转
+            $.ajax({
+//                url: "/user/" + $('#openid').val() + "/lottery",
+                url: "js/getLucky.json",
+                success: function (data) {
+//                    alert(data);
+
+//                    data = JSON.parse(data);
+                    var random = Math.floor(Math.random() * 2);
+                    $('#zhuanpan').on('webkitAnimationEnd', function () {
+                        var type = $(this).data('type');
+                        if (type == '-1') {
+                            alert(data.msg);
+                        }
+                    });
+                    if (data.code < 0) {
+                        $('#zhuanpan').css('-webkit-transition', 'all 5s').css('-webkit-transform', 'rotate(' + ( 3600 - (random ? 292.5 : 157.5)) + 'deg)')
+                                .attr('data-type', '-1');
+                    } else if (data.code == 1) {
+                        var obj = data.data;
+                        switch (obj.prize) {
+                            case 1:
+                                $('#zhuanpan').css('-webkit-transition', 'all 5s').css('-webkit-transform', 'rotate(' + (3600 - 22.5) + 'deg)').attr('data-type', '1');
+                                $('#prize_name').text('一');
+                                break;
+                            case 2:
+                                $('#zhuanpan')
+                                        .css('-webkit-transition', 'all 5s').css('-webkit-transform', 'rotate(' + (3600 - (random ? 67.5 : 202.5)) + 'deg)').attr('data-type', '2');
+                                $('#prize_name').text('二');
+                                break;
+                            case 3:
+                                $('#zhuanpan').css('-webkit-transition', 'all 5s').css('-webkit-transform', 'rotate(' + (3600 - (random ? 112.5 : 247.5)) + 'deg)').attr('data-type', '3');
+                                $('#prize_name').text('三');
+                                break;
+                        }
+                        $('#winner').show();
+                        $('.the-code').show();
+                        $('#loser').hide();
+                        $('#get_number').text(data.data.token);
                     }
-                    getInfo();
+                }, error: function (err) {
+                    alert(err.toString())
                 }
-            }
-        })
+            })
+        }
+        $('#zhuanpan').removeAttr('style');
+
     });
 
-    function getInfo() {
+    function getInfo(want) {
         setTimeout(function () {
             var userSaved = !!localStorage.getItem('userSaved');
             $('.mask').show();
             if (userSaved) {
                 $('#prize_block').show();
             } else {
-                $('#user_form').show();
+                if (want) {
+                    $('#user_form').show();
+                } else {
+                    $('#prize_block').show();
+                }
             }
         }, 5200)
     }
