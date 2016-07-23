@@ -1,4 +1,7 @@
 {
-  "code": -1,
-  "prize": "3"
+  "code": 1,
+  "data": {
+    "prize": 2
+  },
+  "msg": "test"
 }

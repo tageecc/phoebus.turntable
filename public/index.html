@@ -37,13 +37,13 @@
 
         <div class="turntable-container">
             <img class="turntable-cursor css" data-src="http://oaqy0fx2b.bkt.clouddn.com/turntable-cursor.png"/>
-            <img class="turntable-bottom css" id="zhuanpan"
+            <img class="turntable-bottom" id="zhuanpan"
                  src="http://oaqy0fx2b.bkt.clouddn.com/turntable-bottom.png"/>
 
         </div>
         <div class="turntable-container">
             <img class="candidate css" data-src="http://oaqy0fx2b.bkt.clouddn.com/candidate-bg1.png" alt=""/>
-            <img class="candidate" data-src="http://oaqy0fx2b.bkt.clouddn.com/candidate-bg2.png" alt=""/>
+            <img class="candidate css" data-src="http://oaqy0fx2b.bkt.clouddn.com/candidate-bg2.png" alt=""/>
         </div>
         <div class="lucky">
             <button class="btn warning-btn" id="lucky_begin">开始抽奖！</button>
@@ -126,11 +126,9 @@
 
     <h1 class="prize-header" id="winner">恭喜你！获得<span id="prize_name">一</span>等奖</h1>
 
-    <h1 class="prize-header" id="loser" style="display: none">很遗憾~</h1>
-
     <div class="glowing-container">
         <div class="glowing"></div>
-        <img id="#prize-img" src=""/>
+        <img id="prize_img" src=""/>
     </div>
     <div class="the-code">
         <h3>长按复制您的兑奖券</h3>
@@ -227,10 +225,11 @@
 
     $('#lucky_begin').click(function (e) {
         e.preventDefault();
+        $('#zhuanpan').attr('style', '');
+        $('#lucky_begin').attr('disabled', 'disabled');
+
         sessionStorage.setItem('times', (sessionStorage.getItem('times') ? Number(sessionStorage.getItem('times')) + 1 : 1));
-        if (Number(sessionStorage.getItem('times')) == 2) {
-            $('#lucky_begin').attr('disabled', true).text('今日次数已用完，请明天再来');
-        }
+
 
         var userSaved = !!localStorage.getItem('userSaved');
         if (!userSaved) {
@@ -240,66 +239,54 @@
             //这时候转盘开始转
             $.ajax({
                 url: "/user/" + $('#openid').val() + "/lottery",
+//                url: 'js/getLucky.json',
                 success: function (data) {
-//                    alert(data);
 
-//                    data = JSON.parse(data);
+                    data = JSON.parse(data);
                     var random = Math.floor(Math.random() * 2);
-                    $('#zhuanpan').on('webkitAnimationEnd', function () {
-                        var type = $(this).data('type');
-                        if (type == '-1') {
-                            alert(data.msg);
-                        }
-                    });
                     if (data.code < 0) {
                         $('#zhuanpan').css('-webkit-transition', 'all 5s').css('-webkit-transform', 'rotate(' + ( 3600 - (random ? 292.5 : 157.5)) + 'deg)')
                                 .attr('data-type', '-1');
+                        setTimeout(function () {
+                            alert(data.msg);
+                        }, 5200);
                     } else if (data.code == 1) {
                         var obj = data.data;
                         switch (obj.prize) {
                             case 1:
-                                $('#zhuanpan').css('-webkit-transition', 'all 5s').css('-webkit-transform', 'rotate(' + (3600 - 22.5) + 'deg)').attr('data-type', '1');
+                                $('#zhuanpan').css('-webkit-transition', 'all 5s').css('-webkit-transform', 'rotate(' + (3600 - 22.5) + 'deg)');
                                 $('#prize_name').text('一');
                                 break;
                             case 2:
-                                $('#zhuanpan')
-                                        .css('-webkit-transition', 'all 5s').css('-webkit-transform', 'rotate(' + (3600 - (random ? 67.5 : 202.5)) + 'deg)').attr('data-type', '2');
+                                $('#zhuanpan').css('-webkit-transition', 'all 5s').css('-webkit-transform', 'rotate(' + (3600 - (random ? 67.5 : 202.5)) + 'deg)');
                                 $('#prize_name').text('二');
                                 break;
                             case 3:
-                                $('#zhuanpan').css('-webkit-transition', 'all 5s').css('-webkit-transform', 'rotate(' + (3600 - (random ? 112.5 : 247.5)) + 'deg)').attr('data-type', '3');
+                                $('#zhuanpan').css('-webkit-transition', 'all 5s').css('-webkit-transform', 'rotate(' + (3600 - (random ? 112.5 : 247.5)) + 'deg)');
                                 $('#prize_name').text('三');
                                 break;
                         }
+                        $('#prize_img').attr('src', 'img/prize_' + obj.prize + '.png');
                         $('#winner').show();
                         $('.the-code').show();
-                        $('#loser').hide();
                         $('#get_number').text(data.data.token);
+                        setTimeout(function () {
+                            $('.mask').show();
+                            $('#prize_block').show();
+                        }, 5100);
                     }
+                    setTimeout(function () {
+                        $('#lucky_begin').attr('disabled', false);
+                        if (Number(sessionStorage.getItem('times')) == 2) {
+                            $('#lucky_begin').attr('disabled', true).text('今日次数已用完，请明天再来');
+                        }
+                    }, 5100);
                 }, error: function (err) {
                     alert(err.toString())
                 }
             })
         }
-        $('#zhuanpan').removeAttr('style');
-
     });
-
-    function getInfo(want) {
-        setTimeout(function () {
-            var userSaved = !!localStorage.getItem('userSaved');
-            $('.mask').show();
-            if (userSaved) {
-                $('#prize_block').show();
-            } else {
-                if (want) {
-                    $('#user_form').show();
-                } else {
-                    $('#prize_block').show();
-                }
-            }
-        }, 5200)
-    }
 </script>
 </body>
 </html>

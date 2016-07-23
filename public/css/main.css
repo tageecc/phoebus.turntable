@@ -591,3 +591,7 @@ section.form .block input[type=number] {
         -webkit-transform: translateY(0);
     }
 }
+
+#lucky_begin[disabled] {
+    pointer-events: none;
+}
