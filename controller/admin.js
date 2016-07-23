@@ -41,7 +41,19 @@ router.get('/winner-list', adminRequired, function (req, res, next) {
             return;
         }
         if (winners && winners.length > 0) {
-            res.end(JSON.parse(winners));
+            res.end(winners);
+        }
+    })
+});
+
+router.get('/prize-list', adminRequired, function (req, res, next) {
+    Prize.find({}, function (err, prizes) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        if (prizes && prizes.length > 0) {
+            res.end(prizes);
         }
     })
 });

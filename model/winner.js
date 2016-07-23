@@ -2,8 +2,10 @@ var mongoose = require('mongoose');
 var Schema = mongoose.Schema
 var ObjectId = Schema.Types.ObjectId
 var WinnerSchema = new mongoose.Schema({
-    user: {type:ObjectId,ref:'User'},
-    prize: {type: ObjectId, ref: 'Prize'},//奖品
+    name:String,
+    address:Srting,
+    level:Number,
+    prize_name:String,
     token:String,
     create_at: {
         type: Date,

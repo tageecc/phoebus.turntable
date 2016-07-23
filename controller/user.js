@@ -79,7 +79,6 @@ router.get('/:openid/lottery', function (req, res, next) {
             return;
         }
         Prize.find({}, function (err, prizes) {
-            console.log(prizes)
             if (err) {
                 console.error(err);
                 return;
@@ -96,11 +95,12 @@ router.get('/:openid/lottery', function (req, res, next) {
                     res.end(JSON.stringify({
                         code: 1,
                         msg: '恭喜你，获得' + v.level + '等奖',
+                        isinfo:user.name,
                         data: {prize: v.level, prizeName: v.name, token: _token}
                     }));
                     console.log('中奖了：' + v.level);
                     isWinner = true;
-                    Winner.create({user: user, prize: v, token: _token}, function (err) {
+                    Winner.create({name: user.name,address:user.address,level:v.level,prize_name: v.name, token: _token}, function (err) {
                         if (err) {
                             console.log(err);
                             return;
