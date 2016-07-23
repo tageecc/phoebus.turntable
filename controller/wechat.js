@@ -1,7 +1,7 @@
 var express = require('express');
 var crypto = require('crypto');
 var request = require('request');
-var User = require('../model/user');
+var Model = require('../model/model');
 var qs = require('querystring');
 var router = express.Router();
 
@@ -79,7 +79,7 @@ router.get('/token', function (req, res, next) {
             var result = JSON.parse(body);
 
             //res.redirect('/user/' + result.openid + "?access_token=" + result.access_token);//获取用户信息
-            User.findOne({openid: result.openid}, function (err, user) {
+            Model.User.findOne({openid: result.openid}, function (err, user) {
                 if (err) console.error(err);
                 if (!user) {
                     User.create({

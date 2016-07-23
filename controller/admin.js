@@ -1,6 +1,5 @@
 var express = require('express');
-var Admin = require('../model/admin');
-var Prize = require('../model/prize');
+var Model = require('../model/model');
 var router = express.Router();
 
 function adminRequired(req, res, next) {
@@ -16,7 +15,7 @@ router.post('/login', function (req, res, next) {
     var _username = req.body.username;
     var _password = req.body.password;
     console.log(_username, _password)
-    Admin.findOne({name: _username, passwd: _password}, function (err, admin) {
+    Model.Admin.findOne({name: _username, passwd: _password}, function (err, admin) {
         console.log(arguments)
         if (err) {
             console.error(err);
@@ -35,12 +34,16 @@ router.post('/login', function (req, res, next) {
 
 
 router.get('/winner-list', adminRequired, function (req, res, next) {
-    Winner.find({}, function (err, winners) {
+    console.log('user prize')
+    Model.Winner.find()
+        .populate('user prize')
+        .exec(function (err, winners) {
         if (err) {
             console.log(err);
             return;
         }
         if (winners && winners.length > 0) {
+            
             res.end(JSON.stringify(winners));
         }else{
             res.end();
@@ -49,7 +52,7 @@ router.get('/winner-list', adminRequired, function (req, res, next) {
 });
 
 router.get('/prize-list', adminRequired, function (req, res, next) {
-    Prize.find({}, function (err, prizes) {
+    Model.Prize.find({}, function (err, prizes) {
         if (err) {
             console.log(err);
             return;
@@ -69,7 +72,7 @@ router.post('/set-prize', adminRequired, function (req, res, next) {
         probability: req.body.probability,
         num: req.body.num
     }
-    Prize.create(_data, function (err) {
+    Model.Prize.create(_data, function (err) {
         if (err) {
             console.log(err);
             return;
