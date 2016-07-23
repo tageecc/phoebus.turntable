@@ -137,14 +137,25 @@
     <a class="follow" href="#">兑奖请先关注我们</a>
 </div>
 <script>
+    var date = new Date();
+    var DATEKEY = date.getFullYear() + '' + (date.getMonth() + 1) + '' + date.getDate();
+    if (!localStorage.getItem(DATEKEY)) {
+        console.log('init');
+        localStorage.setItem(DATEKEY, 0);
+    }
+
+    var LUCKY_TIMES = localStorage.getItem(DATEKEY);
+    function getLuckyTimes() {
+        return Number(localStorage.getItem(DATEKEY));
+    }
+    function setLuckyTimes(times) {
+        localStorage.setItem(DATEKEY, times);
+    }
     $(document).ready(function () {
         sessionStorage.clear();
 
         var width = $('.turntable').css('width').split('px')[0];
         $('.turntable').css('bottom', (30 - width) + 'px');
-
-//        TODO 发布时这句话删掉
-//        localStorage.clear();
 
         $('#fullpage').fullpage({
             anchors: ['one', 'two'],
@@ -222,15 +233,14 @@
                 .show();
         $('#user_form').show();
     }
+    var clickable = true;
 
     $('#lucky_begin').click(function (e) {
         e.preventDefault();
 
-        var self = this;
-        self.clickable = (self.clickable ? true : false);
-
-        if (self.clickable) {
-            self.clickable = false;
+        if (clickable && getLuckyTimes() < 2) {
+            clickable = false;
+            setLuckyTimes(Number(LUCKY_TIMES) + 1);
 
             var userSaved = !!localStorage.getItem('userSaved');
             if (!userSaved) {
@@ -240,7 +250,6 @@
                 //这时候转盘开始转
                 $.ajax({
                     url: "/user/" + $('#openid').val() + "/lottery",
-//                url: 'js/getLucky.json',
                     success: function (data) {
 
                         data = JSON.parse(data);
@@ -257,7 +266,7 @@
                                 rotateAngle = 0;
                         var randomFlag = !randomCircle && true;
 
-                        if (data.code < 0) {
+                        if (data.code == -1) {
                             targetAngle = angle[data.code][Math.floor(Math.random() * angle[data.code].length)];
                             rotateAngle = rotateAngle - randomCircle * 360 * (randomFlag ? 2 : 10) - targetAngle - rotateAngle % 360;
                             console.log(rotateAngle);
@@ -275,7 +284,7 @@
                             });
                             setTimeout(function () {
                                 alert(data.msg);
-                                self.clickable = true;
+                                clickable = true;
                             }, (during_time + 0.2) * 1000);
 
                         } else {
@@ -295,14 +304,16 @@
                             });
 
                             setTimeout(function () {
-                                self.clickable = true;
-                            });
+                                clickable = true;
+                            }, (during_time + 0.2) * 1000);
                         }
                     }, error: function (err) {
                         alert(err.toString())
                     }
                 })
             }
+        } else if (getLuckyTimes() >= 2) {
+            $('#lucky_begin').text('今日次数已用完，请明天再来')
         }
     });
 </script>

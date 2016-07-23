@@ -270,6 +270,8 @@
                                 '-moz-transition': '-moz-transform ease-out ' + during_time + 's',
                                 '-webkit-transition': '-webkit-transform ease-out ' + during_time + 's',
                                 '-o-transition': '-o-transform ease-out ' + during_time + 's'
+                            }).one("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function (e) {
+                                console.log(e)
                             });
                             setTimeout(function () {
                                 alert(data.msg);
@@ -293,14 +295,14 @@
                             });
                             setTimeout(function () {
                                 clickable = true;
-                            },(during_time + 0.2) * 1000);
+                            }, (during_time + 0.2) * 1000);
                         }
                     }, error: function (err) {
                         alert(err.toString())
                     }
                 })
             }
-        }else{
+        } else {
             console.log('aksdjflkasjdf');
         }
     });
