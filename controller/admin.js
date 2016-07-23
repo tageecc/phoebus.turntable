@@ -122,7 +122,7 @@ router.post('/set-prize', adminRequired, function (req, res, next) {
     })
 });
 
-router.post('/join-game', adminRequired, function (req, res, next) {
+router.get('/join-game', adminRequired, function (req, res, next) {
     Model.User.count({}, function (err, count) {
         if (err) {
             console.log(err);
