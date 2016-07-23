@@ -202,24 +202,47 @@ $('#ugender').click(function () {
 
 $('#form_submit').click(function (e) {
     e.preventDefault();
-    $.ajax({
-        url: '/user/' + $('#openid').val(),
-        method: 'POST',
-        dataType: 'json',
-        data: {
-            uname: $('#uname').val(),
-            ugender: $('#ugender').is(':checked') ? '男' : '女',
-            ucell: $('#ucell').val(),
-            uaddr: $('#uaddr').val()
-        }, success: function (data) {
-            localStorage.setItem('userSaved', 'true');
-            $('.mask').hide();
-            $('.mask-content').hide();
-            $('#lucky_begin').trigger('click');
-        }, error: function (err) {
 
-        }
-    })
+    var unameVal = $('#uname').val();
+    var ucellVal = $('#ucell').val();
+    var uaddrVal = $('#uaddr').val();
+
+    var alertString = '请填写';
+    var nextable = true;
+    if (unameVal.trim() == '') {
+        alertString += ' 姓名 ';
+        nextable = false;
+    }
+    if (ucellVal.trim() == '') {
+        alertString += ' 手机 ';
+        nextable = false;
+    }
+    if (uaddrVal.trim() == '') {
+        alertString += ' 地址 ';
+        nextable = false;
+    }
+    if (nextable) {
+        $.ajax({
+            url: '/user/' + $('#openid').val(),
+            method: 'POST',
+            dataType: 'json',
+            data: {
+                uname: $('#uname').val(),
+                ugender: $('#ugender').is(':checked') ? '男' : '女',
+                ucell: $('#ucell').val(),
+                uaddr: $('#uaddr').val()
+            }, success: function (data) {
+                localStorage.setItem('userSaved', 'true');
+                $('.mask').hide();
+                $('.mask-content').hide();
+                $('#lucky_begin').trigger('click');
+            }, error: function (err) {
+
+            }
+        })
+    } else {
+        alert(alertString);
+    }
 });
 
 $('#information').click(function (e) {
@@ -232,6 +255,12 @@ $('#trigger_info').click(function (e) {
     e.preventDefault();
     $('.mask').show();
     $('#information').show();
+});
+
+$('#get_number').on('copy', function () {
+    $('.mask').hide();
+    $('#prize_block').hide();
+    alert('兑奖券已复制');
 });
 
 function userInfoModelShow() {
