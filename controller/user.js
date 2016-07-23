@@ -33,8 +33,8 @@ router.get('/:openid', function (req, res, next) {
                             console.log(err);
                         }
                         else {
-                            console.log('index',openid)
-                            res.render('index',{openid:result.openid});
+                            console.log('index', openid)
+                            res.render('index', {openid: result.openid});
                         }
                     })
                 }
@@ -51,7 +51,6 @@ router.post('/:openid', function (req, res, next) {
         phone: req.body.ucell,
         address: req.body.uaddr
     }
-    console.log(_data)
     User.update({openid: req.params.openid}, _data, function (err, user) {
         if (err) console.error(err);
         else {
@@ -62,14 +61,12 @@ router.post('/:openid', function (req, res, next) {
 
 router.get('/:openid/lottery', function (req, res, next) {
     var _openid = req.params.openid
-    console.log(_openid);
     User.findOne({openid: _openid}, function (err, user) {
         if (err) {
             console.error(err);
             return;
         }
-        console.log(user)
-        if(!user){
+        if (!user) {
             res.end(JSON.stringify({code: -53, msg: '用户不存在'}));
             return;
         }
@@ -78,47 +75,64 @@ router.get('/:openid/lottery', function (req, res, next) {
             return;
         }
         if (user.winning_times > 0) {
-            res.end(JSON.stringify(JSON.stringify({code: -1, msg: '很遗憾未中奖！'})));
+            res.end(JSON.stringify({code: -1, msg: '很遗憾未中奖！2'}));
             return;
         }
         Prize.find({}, function (err, prizes) {
+            console.log(prizes)
             if (err) {
                 console.error(err);
                 return;
             }
-            if(!prizes||prizes.length<1){
-                res.end(JSON.stringify({code: -1, msg: '很遗憾未中奖！'}));
+            if (!prizes || prizes.length < 1) {
+                res.end({code: -1, msg: '很遗憾未中奖！3'});
                 return;
             }
-            prizes.forEach(function (v, i) {
-                if (v.num > 0) {
-                    if (Math.floor(Math.random() * 1000) < v.probability) {
-                        var _token = util.randomString(10);
-                        Winner.create({
-                            openid: _openid,
-                            prize: v
-                        }, function (err) {
-                            if (err) {
-                                console.log(err);
-                                return;
-                            }
-                            else {
-                                res.end(JSON.stringify({
-                                    code: 1,
-                                    msg: '恭喜你，获得' + v.level + '等奖',
-                                    data: {prizeName: v.name, token: _token}
-                                }));
-                                console.log('恭喜你，获得' + v.level + '等奖');
-                                return;
-                            }
-                        })
-                    }else{
-                        res.end(JSON.stringify({code: -1, msg: '很遗憾未中奖！'}));
-                        console.log('很遗憾未中奖！');
-                        return;
-                    }
+            var isWinner = false;
+            for (var i in prizes) {
+                var v = prizes[i];
+                if (!isWinner && v.num > 0 && Math.floor(Math.random() * 1000) < v.probability) {
+                    var _token = util.randomString(10);
+                    res.end(JSON.stringify({
+                        code: 1,
+                        msg: '恭喜你，获得' + v.level + '等奖',
+                        data: {prize: v.level, prizeName: v.name, token: _token}
+                    }));
+                    console.log('中奖了：' + v.level);
+                    isWinner = true;
+                    Winner.create({user: user, prize: v, token: _token}, function (err) {
+                        if (err) {
+                            console.log(err);
+                            return;
+                        }
+                    })
+                    User.update({openid: _openid}, {
+                        '$inc': {
+                            'lottery_number': -1,
+                            'winning_times': 1
+                        }
+                    }, function (err, user) {
+                        if (err) {
+                            console.log(err)
+                            return;
+                        }
+                    })
+                    Prize.update({level: v.level}, {
+                        '$inc': {
+                            'num': -1
+                        }
+                    }, function (err, user) {
+                        if (err) {
+                            console.log(err)
+                            return;
+                        }
+                    })
                 }
-            })
+            }
+            if (!isWinner) {
+                res.end(JSON.stringify({code: -1, msg: "很遗憾未中奖！"}));
+            }
+
         })
     })
 });

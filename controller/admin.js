@@ -58,7 +58,7 @@ router.post('/set-prize', adminRequired, function (req, res, next) {
             console.log(err);
             return;
         }
-        res.end('info', {msg: '添加成功！'});
+        res.render('info', {msg: '添加成功！'});
     })
 });
 
