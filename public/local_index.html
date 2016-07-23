@@ -293,7 +293,7 @@
                             });
                             setTimeout(function () {
                                 clickable = true;
-                            });
+                            },(during_time + 0.2) * 1000);
                         }
                     }, error: function (err) {
                         alert(err.toString())
