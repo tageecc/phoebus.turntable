@@ -225,10 +225,6 @@
 
     $('#lucky_begin').click(function (e) {
         e.preventDefault();
-        $('#zhuanpan').attr('style', '');
-        $('#lucky_begin').attr('disabled', true);
-
-        sessionStorage.setItem('times', (sessionStorage.getItem('times') ? Number(sessionStorage.getItem('times')) + 1 : 1));
 
         var userSaved = !!localStorage.getItem('userSaved');
         if (!userSaved) {
@@ -242,45 +238,51 @@
                 success: function (data) {
 
 //                    data = JSON.parse(data);
-                    var random = Math.floor(Math.random() * 2);
+                    var during_time = 1;
+                    var angle = {
+                        "-1": [157.5, 292.5],
+                        "1": [22.5],
+                        "2": [67.5, 202.5],
+                        "3": [112.5, 247.5, 337.5]
+                    };
+
+                    var targetAngle,
+                            randomCircle = Math.ceil(Math.random() * 6),
+                            rotateAngle = 0;
+                    var randomFlag = !randomCircle && true;
+
                     if (data.code < 0) {
-                        $('#zhuanpan').css('-webkit-transition', 'all 5s').css('-webkit-transform', 'rotate(' + ( 3600 - (random ? 292.5 : 157.5)) + 'deg)')
-                                .attr('data-type', '-1');
-                        setTimeout(function () {
-                            alert(data.msg);
-                        }, 5200);
-                    } else if (data.code == 1) {
-                        var obj = data.data;
-                        console.log(obj);
-                        switch (obj.prize) {
-                            case 1:
-                                $('#zhuanpan').css('-webkit-transition', 'all 5s').css('-webkit-transform', 'rotate(' + (3600 - 22.5) + 'deg)');
-                                $('#prize_name').text('一');
-                                break;
-                            case 2:
-                                $('#zhuanpan').css('-webkit-transition', 'all 5s').css('-webkit-transform', 'rotate(' + (3600 - (random ? 67.5 : 202.5)) + 'deg)');
-                                $('#prize_name').text('二');
-                                break;
-                            case 3:
-                                $('#zhuanpan').css('-webkit-transition', 'all 5s').css('-webkit-transform', 'rotate(' + (3600 - (random ? 112.5 : 247.5)) + 'deg)');
-                                $('#prize_name').text('三');
-                                break;
-                        }
-                        $('#prize_img').attr('src', 'img/prize_' + obj.prize + '.png');
-                        $('#winner').show();
-                        $('.the-code').show();
-                        $('#get_number').text(data.data.token);
-                        setTimeout(function () {
-                            $('.mask').show();
-                            $('#prize_block').show();
-                        }, 5100)
+                        targetAngle = angle[data.code][Math.floor(Math.random() * angle[data.code].length)];
+                        rotateAngle = rotateAngle - randomCircle * 360 * (randomFlag ? 2 : 10) - targetAngle - rotateAngle % 360;
+                        console.log(rotateAngle);
+
+                        $('#zhuanpan').css({
+                            'transform': 'rotate(' + rotateAngle + 'deg)',
+                            '-ms-transform': 'rotate(' + rotateAngle + 'deg)',
+                            '-webkit-transform': 'rotate(' + rotateAngle + 'deg)',
+                            '-moz-transform': 'rotate(' + rotateAngle + 'deg)',
+                            '-o-transform': 'rotate(' + rotateAngle + 'deg)',
+                            'transition': 'transform ease-out ' + during_time + 's',
+                            '-moz-transition': '-moz-transform ease-out ' + during_time + 's',
+                            '-webkit-transition': '-webkit-transform ease-out ' + during_time + 's',
+                            '-o-transition': '-o-transform ease-out ' + during_time + 's'
+                        })
+                    } else {
+                        targetAngle = angle[data.data.prize][Math.floor(Math.random() * angle[data.data.prize].length)];
+                        rotateAngle = 0 - randomCircle * 360 * (randomFlag ? 5 : 10) - targetAngle - rotateAngle % 360;
+
+                        $('#zhuanpan').css({
+                            'transform': 'rotate(' + rotateAngle + 'deg)',
+                            '-ms-transform': 'rotate(' + rotateAngle + 'deg)',
+                            '-webkit-transform': 'rotate(' + rotateAngle + 'deg)',
+                            '-moz-transform': 'rotate(' + rotateAngle + 'deg)',
+                            '-o-transform': 'rotate(' + rotateAngle + 'deg)',
+                            'transition': 'transform ease-out ' + during_time + 's',
+                            '-moz-transition': '-moz-transform ease-out ' + during_time + 's',
+                            '-webkit-transition': '-webkit-transform ease-out ' + during_time + 's',
+                            '-o-transition': '-o-transform ease-out ' + during_time + 's'
+                        })
                     }
-                    setTimeout(function () {
-                        $('#lucky_begin').attr('disabled', false);
-                        if (Number(sessionStorage.getItem('times')) == 2) {
-                            $('#lucky_begin').attr('disabled', true).text('今日次数已用完，请明天再来');
-                        }
-                    }, 5100);
                 }, error: function (err) {
                     alert(err.toString())
                 }
