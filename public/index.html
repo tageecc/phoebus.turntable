@@ -144,7 +144,8 @@
         localStorage.setItem(DATEKEY, 0);
     }
 
-    var LUCKY_TIMES = localStorage.getItem(DATEKEY);
+
+    var LUCKY_TIMES;
     function getLuckyTimes() {
         return Number(localStorage.getItem(DATEKEY));
     }
@@ -203,7 +204,8 @@
                 uaddr: $('#uaddr').val()
             }, success: function (data) {
                 localStorage.setItem('userSaved', 'true');
-                $('.mask').trigger('click');
+                $('.mask').hide();
+                $('.mask-content').hide();
                 $('#lucky_begin').trigger('click');
             }, error: function (err) {
 
@@ -211,15 +213,10 @@
         })
     });
 
-    $('.mask').click(function (e) {
-        e.preventDefault();
-        $(this).hide();
-        $('.mask-content').hide();
-    });
-
     $('#information').click(function (e) {
         e.preventDefault();
-        $('.mask').trigger('click');
+        $('.mask').hide();
+        $('#information').hide();
     });
 
     $('#trigger_info').click(function (e) {
@@ -229,8 +226,8 @@
     });
 
     function userInfoModelShow() {
-        $('.mask').trigger('click')
-                .show();
+        $('.mask').show();
+        $('.mask-content').hide();
         $('#user_form').show();
     }
     var clickable = true;
@@ -239,13 +236,16 @@
         e.preventDefault();
 
         if (clickable && getLuckyTimes() < 2) {
+            console.log('in');
             clickable = false;
-            setLuckyTimes(Number(LUCKY_TIMES) + 1);
+            setLuckyTimes(Number(getLuckyTimes()) + 1);
 
             var userSaved = !!localStorage.getItem('userSaved');
             if (!userSaved) {
                 //如果用户没输入过信息
                 userInfoModelShow();
+                clickable = true;
+                setLuckyTimes(Number(getLuckyTimes()) - 1);
             } else {
                 //这时候转盘开始转
                 $.ajax({
