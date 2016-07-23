@@ -3,7 +3,7 @@ var Schema = mongoose.Schema
 var ObjectId = Schema.Types.ObjectId
 var WinnerSchema = new mongoose.Schema({
     name:String,
-    address:Srting,
+    address:String,
     level:Number,
     prize_name:String,
     token:String,

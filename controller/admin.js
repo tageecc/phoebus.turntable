@@ -41,7 +41,9 @@ router.get('/winner-list', adminRequired, function (req, res, next) {
             return;
         }
         if (winners && winners.length > 0) {
-            res.end(winners);
+            res.end(JSON.stringify(winners));
+        }else{
+            res.end();
         }
     })
 });
@@ -53,7 +55,9 @@ router.get('/prize-list', adminRequired, function (req, res, next) {
             return;
         }
         if (prizes && prizes.length > 0) {
-            res.end(prizes);
+            res.end(JSON.stringify(prizes));
+        }else{
+            res.end();
         }
     })
 });
