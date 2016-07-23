@@ -61,11 +61,14 @@ router.get('/winner-file', adminRequired, function (req, res, next) {
             }
             if (winners && winners.length > 0) {
 
-                var fields = ['token', '姓名', '性别', '电话', '地址', '奖品名称', '奖品等级'];
+                var fields = ['中奖时间', 'token', '姓名', '性别', '电话', '地址', '奖品名称', '奖品等级'];
                 var data = [];
                 winners.map(function (v, i) {
+                    var date = new Date(v.create_at);
+
                     data.push({
-                        token: v.token,
+                        '中奖时间': date.getFullYear() + '/' + (date.getMonth() + 1) + '/' + date.getDate() + ' ' + (date.getHours() + 1) + ':' + date.getMinutes() + ':' + date.getMinutes(),
+                        'token': v.token,
                         '姓名': v.user.username,
                         '性别': v.user.sex,
                         '电话': v.user.phone,
