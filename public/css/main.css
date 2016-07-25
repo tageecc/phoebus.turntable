@@ -53,6 +53,12 @@ body {
     border-bottom-color: #7e2e44;
 }
 
+#play_img{
+    position: fixed;
+    z-index: 99999;
+    top: 10px;
+    right: 10px;
+}
 /*第一页*/
 .main-bg {
     width: 100%;

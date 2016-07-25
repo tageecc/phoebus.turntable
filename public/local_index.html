@@ -3,21 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="openid" content="oN4DqvpeK6rNYahXXaocSlXoyqCc"">
     <title>放肆去美丽，美妆CS</title>
-    <link rel="stylesheet" href="css/main.css"/>
-    <link rel="stylesheet" href="css/jquery.fullPage.css"/>
-    <script src="js/jquery.min.js"></script>
-    <script src="js/jquery.fullPage.js"></script>
+    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="/css/jquery.fullPage.css"/>
+    <script src="/js/jquery.min.js"></script>
+    <script src="/js/jquery.fullPage.js"></script>
 </head>
 <body>
-<input id="openid" type="hidden" value="<%=openid %>">
-<script>
-    //    var openid = $('#openid').val();
-    //    if (openid.match(/<%=openid %>/g)) {
-    //        location.href = 'wechat/code';
-    //    }
-</script>
+<!--<input id="openid" type="hidden" value="<%=openid %>">-->
+<audio src="audio/bgm.mp3" id="audio" preload></audio>
 
+<img id="play_img" data-play="1"
+     src="data:image/png;base64,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"
+     alt="">
 <div id="fullpage">
     <div class="section main-bg" data-anchor="one">
         <!--主持人部分-->
@@ -50,8 +49,8 @@
         </div>
         <div class="link">
             <a href="#" id="trigger_info">活动规则</a>
-            |
-            <a href="#" id="trigger_business">招商页面</a>
+            <!--|-->
+            <!--<a href="#" id="trigger_business">招商页面</a>-->
         </div>
     </div>
 </div>
@@ -134,17 +133,50 @@
         <h3>长按复制您的兑奖券</h3>
         <span class="code" id="get_number">XaDP09cMkE</span>
     </div>
-    <a class="follow" href="#">兑奖请先关注我们</a>
+    <!--<a class="follow" href="#">兑奖请先关注我们</a>-->
 </div>
 <script>
+    localStorage.clear();
+    var OPENID = document.querySelector('meta[name="openid"]').getAttribute('content');
+    alert(OPENID);
+    var date = new Date();
+    var DATEKEY = date.getFullYear() + '' + (date.getMonth() + 1) + '' + date.getDate();
+    if (!localStorage.getItem(DATEKEY)) {
+        console.log('init');
+        localStorage.setItem(DATEKEY, 0);
+    }
+
+    var LUCKY_TIMES;
+    function getLuckyTimes() {
+        return Number(localStorage.getItem(DATEKEY));
+    }
+
+    function setLuckyTimes(times) {
+        localStorage.setItem(DATEKEY, times);
+    }
+
+    $('.mask').click(function () {
+        if ($('#prize_block').is(':visible') || $('#information').is(':visible')) {
+            $('.mask').hide();
+            $('.mask-content').hide();
+        }
+    });
+    var audio = document.getElementById('audio');
+    $('#play_img').click(function () {
+        var isPlaying = $(this).attr('data-play');
+        if (isPlaying == '1') {
+            audio.pause();
+            $(this).attr('data-play', '0');
+        } else {
+            audio.play();
+            $(this).attr('data-play', '1');
+        }
+    });
     $(document).ready(function () {
         sessionStorage.clear();
 
         var width = $('.turntable').css('width').split('px')[0];
         $('.turntable').css('bottom', (30 - width) + 'px');
-
-//        TODO 发布时这句话删掉
-//        localStorage.clear();
 
         $('#fullpage').fullpage({
             anchors: ['one', 'two'],
@@ -152,7 +184,12 @@
             scrollingSpeed: 500,
 
             afterLoad: function (anchor, index) {
-
+                if (index == 1) {
+                    setTimeout(function () {
+                        audio.play();
+                        $('#play_img').attr('data-play', '1');
+                    }, 500);
+                }
             },
             onLeave: function (index, nextIndex, direction) {
                 if (index == 1 && direction == "down") {
@@ -181,34 +218,53 @@
 
     $('#form_submit').click(function (e) {
         e.preventDefault();
-        $.ajax({
-            url: '/user/' + $('#openid').val(),
-            method: 'POST',
-            dataType: 'json',
-            data: {
-                uname: $('#uname').val(),
-                ugender: $('#ugender').is(':checked') ? '男' : '女',
-                ucell: $('#ucell').val(),
-                uaddr: $('#uaddr').val()
-            }, success: function (data) {
-                localStorage.setItem('userSaved', 'true');
-                $('.mask').trigger('click');
-                $('#lucky_begin').trigger('click');
-            }, error: function (err) {
 
-            }
-        })
-    });
+        var unameVal = $('#uname').val();
+        var ucellVal = $('#ucell').val();
+        var uaddrVal = $('#uaddr').val();
 
-    $('.mask').click(function (e) {
-        e.preventDefault();
-        $(this).hide();
-        $('.mask-content').hide();
+        var alertString = '请填写';
+        var nextable = true;
+        if (unameVal.trim() == '') {
+            alertString += ' 姓名 ';
+            nextable = false;
+        }
+        if (ucellVal.trim() == '') {
+            alertString += ' 手机 ';
+            nextable = false;
+        }
+        if (uaddrVal.trim() == '') {
+            alertString += ' 地址 ';
+            nextable = false;
+        }
+        if (nextable) {
+            $.ajax({
+                url: '/user/' + OPENID,
+                method: 'POST',
+                dataType: 'json',
+                data: {
+                    uname: $('#uname').val(),
+                    ugender: $('#ugender').is(':checked') ? '男' : '女',
+                    ucell: $('#ucell').val(),
+                    uaddr: $('#uaddr').val()
+                }, success: function (data) {
+                    localStorage.setItem('isUserSaved', 'true');
+                    $('.mask').hide();
+                    $('.mask-content').hide();
+                    $('#lucky_begin').trigger('click');
+                }, error: function (err) {
+                    alert('对不起，服务器出了点小故障。')
+                }
+            })
+        } else {
+            alert(alertString);
+        }
     });
 
     $('#information').click(function (e) {
         e.preventDefault();
-        $('.mask').trigger('click');
+        $('.mask').hide();
+        $('#information').hide();
     });
 
     $('#trigger_info').click(function (e) {
@@ -217,31 +273,40 @@
         $('#information').show();
     });
 
+    $('#get_number').on('copy', function () {
+        $('.mask').hide();
+        $('#prize_block').hide();
+        alert('兑奖券已复制');
+    });
+
     function userInfoModelShow() {
-        $('.mask').trigger('click')
-                .show();
+        $('.mask').show();
+        $('.mask-content').hide();
         $('#user_form').show();
     }
-
     var clickable = true;
+
     $('#lucky_begin').click(function (e) {
         e.preventDefault();
 
-        if (clickable) {
+        if (clickable && Number(getLuckyTimes()) < 2) {
+            console.log('in');
             clickable = false;
-            console.log('clicked');
-            var userSaved = !!localStorage.getItem('userSaved');
+            setLuckyTimes(Number(getLuckyTimes()) + 1);
+
+            var userSaved = !!localStorage.getItem('isUserSaved');
             if (!userSaved) {
                 //如果用户没输入过信息
                 userInfoModelShow();
+                clickable = true;
+                setLuckyTimes(Number(getLuckyTimes()) - 1);
             } else {
                 //这时候转盘开始转
                 $.ajax({
-//                url: "/user/" + $('#openid').val() + "/lottery",
-                    url: 'js/getLucky.json',
+                    url: "/user/" + OPENID + "/lottery",
                     success: function (data) {
 
-//                    data = JSON.parse(data);
+                        data = JSON.parse(data);
                         var during_time = 1;
                         var angle = {
                             "-1": [157.5, 292.5],
@@ -255,7 +320,7 @@
                                 rotateAngle = 0;
                         var randomFlag = !randomCircle && true;
 
-                        if (data.code < 0) {
+                        if (data.code == -1) {
                             targetAngle = angle[data.code][Math.floor(Math.random() * angle[data.code].length)];
                             rotateAngle = rotateAngle - randomCircle * 360 * (randomFlag ? 2 : 10) - targetAngle - rotateAngle % 360;
                             console.log(rotateAngle);
@@ -270,8 +335,6 @@
                                 '-moz-transition': '-moz-transform ease-out ' + during_time + 's',
                                 '-webkit-transition': '-webkit-transform ease-out ' + during_time + 's',
                                 '-o-transition': '-o-transform ease-out ' + during_time + 's'
-                            }).one("transitionend webkitTransitionEnd oTransitionEnd MSTransitionEnd", function (e) {
-                                console.log(e)
                             });
                             setTimeout(function () {
                                 alert(data.msg);
@@ -293,8 +356,29 @@
                                 '-webkit-transition': '-webkit-transform ease-out ' + during_time + 's',
                                 '-o-transition': '-o-transform ease-out ' + during_time + 's'
                             });
+
                             setTimeout(function () {
                                 clickable = true;
+                                $('.mask').show();
+                                $('.mask-content').hide();
+
+                                var pn = '';
+                                switch (data.data.prize) {
+                                    case 1:
+                                        pn = '一';
+                                        break;
+                                    case 2:
+                                        pn = '二';
+                                        break;
+                                    case 3:
+                                        pn = '三';
+                                        break;
+                                }
+                                $('#prize_name').text(pn);
+                                $('#prize_img').attr('src', 'http://oaqy0fx2b.bkt.clouddn.com/prize_' + data.data.prize + '.png');
+                                $('#get_number').text(data.data.token);
+                                $('#prize_block').show();
+
                             }, (during_time + 0.2) * 1000);
                         }
                     }, error: function (err) {
@@ -302,8 +386,8 @@
                     }
                 })
             }
-        } else {
-            console.log('aksdjflkasjdf');
+        } else if (getLuckyTimes() >= 2) {
+            $('#lucky_begin').text('今日次数已用完，请明天再来')
         }
     });
 </script>
