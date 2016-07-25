@@ -327,6 +327,18 @@ section.form .block input[type=checkbox] {
     display: none;
 }
 
+.close {
+    color: #ffffff;
+    font-size: 2em;
+    position: absolute;
+    top: 0;
+    left: 0;
+    padding: 10px;
+    display: block;
+    line-height: 1em;
+    z-index: 999;
+}
+
 /*登记表单*/
 .mask-content {
     position: absolute;

@@ -55,7 +55,8 @@
         </div>
     </div>
 </div>
-<div class="mask"></div>
+<div class="mask">
+</div>
 <div class="mask-content" id="information">
 
     <h2 class="info-header">活动规则 /</h2>
@@ -91,9 +92,11 @@
         每人每日有2次抽奖机会<br/>
         获奖后凭兑奖券联系活动主办单位即可兑奖
     </p>
+    <span class="close">×</span>
 
 </div>
 <div class="mask-content" id="user_form">
+
     <header>
         <h1>请先填写收货信息</h1>
         <small>以下信息收集仅用于奖品发放便于联系，予以保密绝不外泄</small>
@@ -121,6 +124,7 @@
         </div>
     </section>
     <button class="btn error-btn" id="form_submit">提交，开始抽奖！</button>
+
 </div>
 <div class="mask-content" id="prize_block">
 
@@ -134,13 +138,15 @@
         <h3>长按复制您的兑奖券</h3>
         <span class="code" id="get_number">XaDP09cMkE</span>
     </div>
+    <span class="close">×</span>
+
     <!--<a class="follow" href="#">兑奖请先关注我们</a>-->
 </div>
 <script>
 localStorage.clear();
 var OPENID = document.querySelector('meta[name="openid"]').getAttribute('content');
-var userSaved = (localStorage.getItem('isUserSaved') != null);
 var clickable = true;
+var isAwarded = (localStorage.getItem('award') != null);
 
 var date = new Date();
 var DATEKEY = date.getFullYear() + '' + (date.getMonth() + 1) + '' + date.getDate();
@@ -176,7 +182,28 @@ $('#play_img').click(function () {
     }
 });
 $(document).ready(function () {
-    sessionStorage.clear();
+
+    if (isAwarded) {
+        $('.mask').show();
+        var award = JSON.parse(localStorage.getItem('award'));
+        var pn = '';
+        switch (award.data.prize) {
+            case 1:
+                pn = '一';
+                break;
+            case 2:
+                pn = '二';
+                break;
+            case 3:
+                pn = '三';
+                break;
+        }
+        $('#prize_name').text(pn);
+        $('#prize_img').attr('src', 'http://oaqy0fx2b.bkt.clouddn.com/prize_' + award.data.prize + '.png');
+        $('#get_number').text(award.data.token);
+        $('#prize_block').show();
+
+    }
 
     var width = $('.turntable').css('width').split('px')[0];
     $('.turntable').css('bottom', (30 - width) + 'px');
@@ -264,22 +291,21 @@ $('#form_submit').click(function (e) {
     }
 });
 
-$('#information').click(function (e) {
+$('.close').click(function (e) {
     e.preventDefault();
     $('.mask').hide();
-    $('#information').hide();
+    $('.mask-content').hide();
+})
+
+$('#information').click(function (e) {
+    e.preventDefault();
+    $('.close').trigger('click');
 });
 
 $('#trigger_info').click(function (e) {
     e.preventDefault();
     $('.mask').show();
     $('#information').show();
-});
-
-$('#get_number').on('copy', function () {
-    $('.mask').hide();
-    $('#prize_block').hide();
-    alert('兑奖券已复制');
 });
 
 function userInfoModelShow() {
@@ -296,6 +322,7 @@ $('#lucky_begin').click(function (e) {
         clickable = false;
         setLuckyTimes(Number(getLuckyTimes()) + 1);
 
+        var userSaved = (localStorage.getItem('isUserSaved') != null);
         if (!userSaved) {
             //如果用户没输入过信息
             clickable = true;
@@ -379,7 +406,7 @@ $('#lucky_begin').click(function (e) {
                             $('#prize_img').attr('src', 'http://oaqy0fx2b.bkt.clouddn.com/prize_' + data.data.prize + '.png');
                             $('#get_number').text(data.data.token);
                             $('#prize_block').show();
-
+                            localStorage.setItem('award', JSON.stringify(data));
                         }, (during_time + 0.2) * 1000);
                     }
                 }, error: function (err) {
