@@ -140,6 +140,7 @@
 localStorage.clear();
 var OPENID = document.querySelector('meta[name="openid"]').getAttribute('content');
 var userSaved = (localStorage.getItem('isUserSaved') != null);
+var clickable = true;
 
 var date = new Date();
 var DATEKEY = date.getFullYear() + '' + (date.getMonth() + 1) + '' + date.getDate();
@@ -286,7 +287,6 @@ function userInfoModelShow() {
     $('.mask-content').hide();
     $('#user_form').show();
 }
-var clickable = true;
 
 $('#lucky_begin').click(function (e) {
     e.preventDefault();
@@ -298,8 +298,8 @@ $('#lucky_begin').click(function (e) {
 
         if (!userSaved) {
             //如果用户没输入过信息
-            userInfoModelShow();
             clickable = true;
+            userInfoModelShow();
             setLuckyTimes(Number(getLuckyTimes()) - 1);
         } else {
             //这时候转盘开始转
