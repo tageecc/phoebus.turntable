@@ -10,7 +10,7 @@
     <script src="/js/jquery.fullPage.js"></script>
 </head>
 <body>
-<audio src="audio/bgm.mp3" id="audio" loop></audio>
+<audio src="audio/bgm.mp3" id="audio" preload></audio>
 <input id="openid" type="hidden" value="<%=openid %>">
 
 <div id="fullpage">
@@ -139,7 +139,6 @@
         localStorage.setItem(DATEKEY, 0);
     }
 
-
     var LUCKY_TIMES;
     function getLuckyTimes() {
         return Number(localStorage.getItem(DATEKEY));
@@ -155,7 +154,7 @@
             $('.mask-content').hide();
         }
     });
-
+    var audio = document.getElementById('audio');
     $(document).ready(function () {
         sessionStorage.clear();
 
@@ -169,7 +168,6 @@
 
             afterLoad: function (anchor, index) {
                 if (index == 1) {
-                    var audio = document.getElementById('audio');
                     audio.play();
                 }
             },
@@ -230,7 +228,7 @@
                     ucell: $('#ucell').val(),
                     uaddr: $('#uaddr').val()
                 }, success: function (data) {
-                    localStorage.setItem('userSaved', 'true');
+                    localStorage.setItem('isUserSaved', 'true');
                     $('.mask').hide();
                     $('.mask-content').hide();
                     $('#lucky_begin').trigger('click');
@@ -276,7 +274,7 @@
             clickable = false;
             setLuckyTimes(Number(getLuckyTimes()) + 1);
 
-            var userSaved = !!localStorage.getItem('userSaved');
+            var userSaved = !!localStorage.getItem('isUserSaved');
             if (!userSaved) {
                 //如果用户没输入过信息
                 userInfoModelShow();
