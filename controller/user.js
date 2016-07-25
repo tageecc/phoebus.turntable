@@ -98,7 +98,7 @@ router.get('/:openid/lottery', function (req, res, next) {
                     }));
                     console.log('中奖了：' + v.level);
                     isWinner = true;
-                    Model.Winner.create({user: user, prize: v, token: _token}, function (err) {
+                    Model.Winner.create({user: user, prize: v, token: _token,create_at:new Date()}, function (err) {
                         if (err) {
                             console.log(err);
                             return;

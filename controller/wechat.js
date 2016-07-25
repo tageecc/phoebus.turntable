@@ -84,6 +84,7 @@ router.get('/token', function (req, res, next) {
                 if (!user) {
                     Model.User.create({
                         openid: result.openid,
+                        create_at:new Date()
                     }, function (err) {
                         if (err) {
                             console.log(err);
