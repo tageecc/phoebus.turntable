@@ -4,19 +4,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>放肆去美丽，美妆CS</title>
-    <link rel="stylesheet" href="/css/main.css"/>
+    <link rel="stylesheet" href="/css/main.min.css"/>
     <link rel="stylesheet" href="/css/jquery.fullPage.css"/>
     <script src="/js/jquery.min.js"></script>
     <script src="/js/jquery.fullPage.js"></script>
 </head>
 <body>
+<audio src="audio/bgm.mp3" id="audio" loop></audio>
 <input id="openid" type="hidden" value="<%=openid %>">
-<script>
-    //    var openid = $('#openid').val();
-    //    if (openid.match(/<%=openid %>/g)) {
-    //        location.href = 'wechat/code';
-    //    }
-</script>
 
 <div id="fullpage">
     <div class="section main-bg" data-anchor="one">
@@ -50,8 +45,8 @@
         </div>
         <div class="link">
             <a href="#" id="trigger_info">活动规则</a>
-            |
-            <a href="#" id="trigger_business">招商页面</a>
+            <!--|-->
+            <!--<a href="#" id="trigger_business">招商页面</a>-->
         </div>
     </div>
 </div>
@@ -134,246 +129,249 @@
         <h3>长按复制您的兑奖券</h3>
         <span class="code" id="get_number">XaDP09cMkE</span>
     </div>
-    <a class="follow" href="#">兑奖请先关注我们</a>
+    <!--<a class="follow" href="#">兑奖请先关注我们</a>-->
 </div>
 <script>
-var date = new Date();
-var DATEKEY = date.getFullYear() + '' + (date.getMonth() + 1) + '' + date.getDate();
-if (!localStorage.getItem(DATEKEY)) {
-    console.log('init');
-    localStorage.setItem(DATEKEY, 0);
-}
-
-
-var LUCKY_TIMES;
-function getLuckyTimes() {
-    return Number(localStorage.getItem(DATEKEY));
-}
-
-function setLuckyTimes(times) {
-    localStorage.setItem(DATEKEY, times);
-}
-
-$('.mask').click(function () {
-    if ($('#prize_block').is(':visible') || $('#information').is(':visible')) {
-        $('.mask').hide();
-        $('.mask-content').hide();
+    var date = new Date();
+    var DATEKEY = date.getFullYear() + '' + (date.getMonth() + 1) + '' + date.getDate();
+    if (!localStorage.getItem(DATEKEY)) {
+        console.log('init');
+        localStorage.setItem(DATEKEY, 0);
     }
-});
 
-$(document).ready(function () {
-    sessionStorage.clear();
 
-    var width = $('.turntable').css('width').split('px')[0];
-    $('.turntable').css('bottom', (30 - width) + 'px');
+    var LUCKY_TIMES;
+    function getLuckyTimes() {
+        return Number(localStorage.getItem(DATEKEY));
+    }
 
-    $('#fullpage').fullpage({
-        anchors: ['one', 'two'],
-        css3: true,
-        scrollingSpeed: 500,
+    function setLuckyTimes(times) {
+        localStorage.setItem(DATEKEY, times);
+    }
 
-        afterLoad: function (anchor, index) {
-
-        },
-        onLeave: function (index, nextIndex, direction) {
-            if (index == 1 && direction == "down") {
-                var isFirstViewed = !!localStorage.getItem('isFirstViewed');
-                if (!isFirstViewed) {
-                    localStorage.setItem('isFirstViewed', 'true');
-                    setTimeout(function () {
-                        $('.mask').show();
-                        $('#information').show();
-                    }, 400);
-                }
-            }
+    $('.mask').click(function () {
+        if ($('#prize_block').is(':visible') || $('#information').is(':visible')) {
+            $('.mask').hide();
+            $('.mask-content').hide();
         }
     });
-});
-$('#ugender').click(function () {
-    var checked = $(this).prop('checked');
-    if (checked) {
-        $(this).closest('.radio-box').addClass('checked');
-        $(this).closest('.radio-box').find('.handler').text('男');
-    } else {
-        $(this).closest('.radio-box').removeClass('checked');
-        $(this).closest('.radio-box').find('.handler').text('女');
-    }
-});
 
-$('#form_submit').click(function (e) {
-    e.preventDefault();
+    $(document).ready(function () {
+        sessionStorage.clear();
 
-    var unameVal = $('#uname').val();
-    var ucellVal = $('#ucell').val();
-    var uaddrVal = $('#uaddr').val();
+        var width = $('.turntable').css('width').split('px')[0];
+        $('.turntable').css('bottom', (30 - width) + 'px');
 
-    var alertString = '请填写';
-    var nextable = true;
-    if (unameVal.trim() == '') {
-        alertString += ' 姓名 ';
-        nextable = false;
-    }
-    if (ucellVal.trim() == '') {
-        alertString += ' 手机 ';
-        nextable = false;
-    }
-    if (uaddrVal.trim() == '') {
-        alertString += ' 地址 ';
-        nextable = false;
-    }
-    if (nextable) {
-        $.ajax({
-            url: '/user/' + $('#openid').val(),
-            method: 'POST',
-            dataType: 'json',
-            data: {
-                uname: $('#uname').val(),
-                ugender: $('#ugender').is(':checked') ? '男' : '女',
-                ucell: $('#ucell').val(),
-                uaddr: $('#uaddr').val()
-            }, success: function (data) {
-                localStorage.setItem('userSaved', 'true');
-                $('.mask').hide();
-                $('.mask-content').hide();
-                $('#lucky_begin').trigger('click');
-            }, error: function (err) {
+        $('#fullpage').fullpage({
+            anchors: ['one', 'two'],
+            css3: true,
+            scrollingSpeed: 500,
 
-            }
-        })
-    } else {
-        alert(alertString);
-    }
-});
-
-$('#information').click(function (e) {
-    e.preventDefault();
-    $('.mask').hide();
-    $('#information').hide();
-});
-
-$('#trigger_info').click(function (e) {
-    e.preventDefault();
-    $('.mask').show();
-    $('#information').show();
-});
-
-$('#get_number').on('copy', function () {
-    $('.mask').hide();
-    $('#prize_block').hide();
-    alert('兑奖券已复制');
-});
-
-function userInfoModelShow() {
-    $('.mask').show();
-    $('.mask-content').hide();
-    $('#user_form').show();
-}
-var clickable = true;
-
-$('#lucky_begin').click(function (e) {
-    e.preventDefault();
-
-    if (clickable && getLuckyTimes() < 2) {
-        console.log('in');
-        clickable = false;
-        setLuckyTimes(Number(getLuckyTimes()) + 1);
-
-        var userSaved = !!localStorage.getItem('userSaved');
-        if (!userSaved) {
-            //如果用户没输入过信息
-            userInfoModelShow();
-            clickable = true;
-            setLuckyTimes(Number(getLuckyTimes()) - 1);
-        } else {
-            //这时候转盘开始转
-            $.ajax({
-                url: "/user/" + $('#openid').val() + "/lottery",
-                success: function (data) {
-
-                    data = JSON.parse(data);
-                    var during_time = 1;
-                    var angle = {
-                        "-1": [157.5, 292.5],
-                        "1": [22.5],
-                        "2": [67.5, 202.5],
-                        "3": [112.5, 247.5, 337.5]
-                    };
-
-                    var targetAngle,
-                            randomCircle = Math.ceil(Math.random() * 6),
-                            rotateAngle = 0;
-                    var randomFlag = !randomCircle && true;
-
-                    if (data.code == -1) {
-                        targetAngle = angle[data.code][Math.floor(Math.random() * angle[data.code].length)];
-                        rotateAngle = rotateAngle - randomCircle * 360 * (randomFlag ? 2 : 10) - targetAngle - rotateAngle % 360;
-                        console.log(rotateAngle);
-
-                        $('#zhuanpan').css({
-                            'transform': 'rotate(' + rotateAngle + 'deg)',
-                            '-ms-transform': 'rotate(' + rotateAngle + 'deg)',
-                            '-webkit-transform': 'rotate(' + rotateAngle + 'deg)',
-                            '-moz-transform': 'rotate(' + rotateAngle + 'deg)',
-                            '-o-transform': 'rotate(' + rotateAngle + 'deg)',
-                            'transition': 'transform ease-out ' + during_time + 's',
-                            '-moz-transition': '-moz-transform ease-out ' + during_time + 's',
-                            '-webkit-transition': '-webkit-transform ease-out ' + during_time + 's',
-                            '-o-transition': '-o-transform ease-out ' + during_time + 's'
-                        });
+            afterLoad: function (anchor, index) {
+                if (index == 1) {
+                    var audio = document.getElementById('audio');
+                    audio.play();
+                }
+            },
+            onLeave: function (index, nextIndex, direction) {
+                if (index == 1 && direction == "down") {
+                    var isFirstViewed = !!localStorage.getItem('isFirstViewed');
+                    if (!isFirstViewed) {
+                        localStorage.setItem('isFirstViewed', 'true');
                         setTimeout(function () {
-                            alert(data.msg);
-                            clickable = true;
-                        }, (during_time + 0.2) * 1000);
-
-                    } else {
-                        targetAngle = angle[data.data.prize][Math.floor(Math.random() * angle[data.data.prize].length)];
-                        rotateAngle = 0 - randomCircle * 360 * (randomFlag ? 5 : 10) - targetAngle - rotateAngle % 360;
-
-                        $('#zhuanpan').css({
-                            'transform': 'rotate(' + rotateAngle + 'deg)',
-                            '-ms-transform': 'rotate(' + rotateAngle + 'deg)',
-                            '-webkit-transform': 'rotate(' + rotateAngle + 'deg)',
-                            '-moz-transform': 'rotate(' + rotateAngle + 'deg)',
-                            '-o-transform': 'rotate(' + rotateAngle + 'deg)',
-                            'transition': 'transform ease-out ' + during_time + 's',
-                            '-moz-transition': '-moz-transform ease-out ' + during_time + 's',
-                            '-webkit-transition': '-webkit-transform ease-out ' + during_time + 's',
-                            '-o-transition': '-o-transform ease-out ' + during_time + 's'
-                        });
-
-                        setTimeout(function () {
-                            clickable = true;
                             $('.mask').show();
-                            $('.mask-content').hide();
-
-                            var pn = '';
-                            switch (data.data.prize) {
-                                case 1:
-                                    pn = '一';
-                                    break;
-                                case 2:
-                                    pn = '二';
-                                    break;
-                                case 3:
-                                    pn = '三';
-                                    break;
-                            }
-                            $('#prize_name').text(pn);
-                            $('#prize_img').attr('src', 'http://oaqy0fx2b.bkt.clouddn.com/prize_' + data.data.prize + '.png');
-                            $('#get_number').text(data.data.token);
-                            $('#prize_block').show();
-
-                        }, (during_time + 0.2) * 1000);
+                            $('#information').show();
+                        }, 400);
                     }
+                }
+            }
+        });
+    });
+    $('#ugender').click(function () {
+        var checked = $(this).prop('checked');
+        if (checked) {
+            $(this).closest('.radio-box').addClass('checked');
+            $(this).closest('.radio-box').find('.handler').text('男');
+        } else {
+            $(this).closest('.radio-box').removeClass('checked');
+            $(this).closest('.radio-box').find('.handler').text('女');
+        }
+    });
+
+    $('#form_submit').click(function (e) {
+        e.preventDefault();
+
+        var unameVal = $('#uname').val();
+        var ucellVal = $('#ucell').val();
+        var uaddrVal = $('#uaddr').val();
+
+        var alertString = '请填写';
+        var nextable = true;
+        if (unameVal.trim() == '') {
+            alertString += ' 姓名 ';
+            nextable = false;
+        }
+        if (ucellVal.trim() == '') {
+            alertString += ' 手机 ';
+            nextable = false;
+        }
+        if (uaddrVal.trim() == '') {
+            alertString += ' 地址 ';
+            nextable = false;
+        }
+        if (nextable) {
+            $.ajax({
+                url: '/user/' + $('#openid').val(),
+                method: 'POST',
+                dataType: 'json',
+                data: {
+                    uname: $('#uname').val(),
+                    ugender: $('#ugender').is(':checked') ? '男' : '女',
+                    ucell: $('#ucell').val(),
+                    uaddr: $('#uaddr').val()
+                }, success: function (data) {
+                    localStorage.setItem('userSaved', 'true');
+                    $('.mask').hide();
+                    $('.mask-content').hide();
+                    $('#lucky_begin').trigger('click');
                 }, error: function (err) {
-                    alert(err.toString())
+
                 }
             })
+        } else {
+            alert(alertString);
         }
-    } else if (getLuckyTimes() >= 2) {
-        $('#lucky_begin').text('今日次数已用完，请明天再来')
+    });
+
+    $('#information').click(function (e) {
+        e.preventDefault();
+        $('.mask').hide();
+        $('#information').hide();
+    });
+
+    $('#trigger_info').click(function (e) {
+        e.preventDefault();
+        $('.mask').show();
+        $('#information').show();
+    });
+
+    $('#get_number').on('copy', function () {
+        $('.mask').hide();
+        $('#prize_block').hide();
+        alert('兑奖券已复制');
+    });
+
+    function userInfoModelShow() {
+        $('.mask').show();
+        $('.mask-content').hide();
+        $('#user_form').show();
     }
-});
+    var clickable = true;
+
+    $('#lucky_begin').click(function (e) {
+        e.preventDefault();
+
+        if (clickable && getLuckyTimes() < 2) {
+            console.log('in');
+            clickable = false;
+            setLuckyTimes(Number(getLuckyTimes()) + 1);
+
+            var userSaved = !!localStorage.getItem('userSaved');
+            if (!userSaved) {
+                //如果用户没输入过信息
+                userInfoModelShow();
+                clickable = true;
+                setLuckyTimes(Number(getLuckyTimes()) - 1);
+            } else {
+                //这时候转盘开始转
+                $.ajax({
+                    url: "/user/" + $('#openid').val() + "/lottery",
+                    success: function (data) {
+
+                        data = JSON.parse(data);
+                        var during_time = 1;
+                        var angle = {
+                            "-1": [157.5, 292.5],
+                            "1": [22.5],
+                            "2": [67.5, 202.5],
+                            "3": [112.5, 247.5, 337.5]
+                        };
+
+                        var targetAngle,
+                                randomCircle = Math.ceil(Math.random() * 6),
+                                rotateAngle = 0;
+                        var randomFlag = !randomCircle && true;
+
+                        if (data.code == -1) {
+                            targetAngle = angle[data.code][Math.floor(Math.random() * angle[data.code].length)];
+                            rotateAngle = rotateAngle - randomCircle * 360 * (randomFlag ? 2 : 10) - targetAngle - rotateAngle % 360;
+                            console.log(rotateAngle);
+
+                            $('#zhuanpan').css({
+                                'transform': 'rotate(' + rotateAngle + 'deg)',
+                                '-ms-transform': 'rotate(' + rotateAngle + 'deg)',
+                                '-webkit-transform': 'rotate(' + rotateAngle + 'deg)',
+                                '-moz-transform': 'rotate(' + rotateAngle + 'deg)',
+                                '-o-transform': 'rotate(' + rotateAngle + 'deg)',
+                                'transition': 'transform ease-out ' + during_time + 's',
+                                '-moz-transition': '-moz-transform ease-out ' + during_time + 's',
+                                '-webkit-transition': '-webkit-transform ease-out ' + during_time + 's',
+                                '-o-transition': '-o-transform ease-out ' + during_time + 's'
+                            });
+                            setTimeout(function () {
+                                alert(data.msg);
+                                clickable = true;
+                            }, (during_time + 0.2) * 1000);
+
+                        } else {
+                            targetAngle = angle[data.data.prize][Math.floor(Math.random() * angle[data.data.prize].length)];
+                            rotateAngle = 0 - randomCircle * 360 * (randomFlag ? 5 : 10) - targetAngle - rotateAngle % 360;
+
+                            $('#zhuanpan').css({
+                                'transform': 'rotate(' + rotateAngle + 'deg)',
+                                '-ms-transform': 'rotate(' + rotateAngle + 'deg)',
+                                '-webkit-transform': 'rotate(' + rotateAngle + 'deg)',
+                                '-moz-transform': 'rotate(' + rotateAngle + 'deg)',
+                                '-o-transform': 'rotate(' + rotateAngle + 'deg)',
+                                'transition': 'transform ease-out ' + during_time + 's',
+                                '-moz-transition': '-moz-transform ease-out ' + during_time + 's',
+                                '-webkit-transition': '-webkit-transform ease-out ' + during_time + 's',
+                                '-o-transition': '-o-transform ease-out ' + during_time + 's'
+                            });
+
+                            setTimeout(function () {
+                                clickable = true;
+                                $('.mask').show();
+                                $('.mask-content').hide();
+
+                                var pn = '';
+                                switch (data.data.prize) {
+                                    case 1:
+                                        pn = '一';
+                                        break;
+                                    case 2:
+                                        pn = '二';
+                                        break;
+                                    case 3:
+                                        pn = '三';
+                                        break;
+                                }
+                                $('#prize_name').text(pn);
+                                $('#prize_img').attr('src', 'http://oaqy0fx2b.bkt.clouddn.com/prize_' + data.data.prize + '.png');
+                                $('#get_number').text(data.data.token);
+                                $('#prize_block').show();
+
+                            }, (during_time + 0.2) * 1000);
+                        }
+                    }, error: function (err) {
+                        alert(err.toString())
+                    }
+                })
+            }
+        } else if (getLuckyTimes() >= 2) {
+            $('#lucky_begin').text('今日次数已用完，请明天再来')
+        }
+    });
 </script>
 </body>
 </html>
