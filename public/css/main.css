@@ -36,6 +36,10 @@ body {
     text-align: center;
     display: block;
     position: relative;
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
 }
 
 .btn:active {
@@ -273,7 +277,7 @@ body {
 
 .radio-box {
     width: 84px;
-    height: 35px;
+    height: 30px;
     border-radius: 4px;
     background-color: #b9244d;
     position: relative;
@@ -291,14 +295,14 @@ body {
 .radio-box .handler {
     width: 40px;
     border-radius: 2px;
-    height: 31px;
+    height: 25px;
     position: absolute;
     top: 2px;
     left: 42px;
     background-color: #ebebeb;
     color: #b9244d;
     font-size: 1.2em;
-    line-height: 31px;
+    line-height: 25px;
     text-align: center;
 }
 
@@ -356,13 +360,13 @@ section.form .block input[type=checkbox] {
 }
 
 .mask-content header h1 {
-    font-size: 1.5em;
+    font-size: 1em;
     color: white;
     font-weight: 900;
 }
 
 .mask-content header small {
-    font-size: .4em;
+    font-size: .7em;
     color: white;
     opacity: .8;
 }
@@ -445,6 +449,8 @@ section.form .block input[type=checkbox] {
     background-color: #ffffff;
     color: #000000;
     margin: 0 auto;
+    position: relative;
+    z-index: 98999999;
 }
 
 .glowing-container img {
@@ -493,7 +499,7 @@ section.form .block {
 section.form .block label {
     display: block;
     font-weight: 500;
-    font-size: 1.2em;
+    font-size: .9em;
     color: white;
     margin-bottom: 10px;
 }
@@ -605,8 +611,4 @@ section.form .block input[type=number] {
     100% {
         -webkit-transform: translateY(0);
     }
-}
-
-#lucky_begin[disabled] {
-    pointer-events: none;
 }
