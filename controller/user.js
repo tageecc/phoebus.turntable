@@ -74,6 +74,17 @@ router.get('/:openid/lottery', function (req, res, next) {
         }
         if (user.winning_times > 0) {
             res.end(JSON.stringify({code: -1, msg: '很遗憾未中奖！'}));
+            Model.User.update({openid: _openid}, {
+                '$inc': {
+                    'lottery_number': -1,
+                    'winning_times': 1
+                }
+            }, function (err, user) {
+                if (err) {
+                    console.log(err)
+                    return;
+                }
+            })
             return;
         }
         Model.Prize.find({}, function (err, prizes) {
@@ -83,6 +94,17 @@ router.get('/:openid/lottery', function (req, res, next) {
             }
             if (!prizes || prizes.length < 1) {
                 res.end({code: -1, msg: '很遗憾未中奖！'});
+                Model.User.update({openid: _openid}, {
+                    '$inc': {
+                        'lottery_number': -1,
+                        'winning_times': 1
+                    }
+                }, function (err, user) {
+                    if (err) {
+                        console.log(err)
+                        return;
+                    }
+                })
                 return;
             }
             var isWinner = false;
@@ -128,6 +150,16 @@ router.get('/:openid/lottery', function (req, res, next) {
                 }
             }
             if (!isWinner) {
+                Model.User.update({openid: _openid}, {
+                    '$inc': {
+                        'lottery_number': -1
+                    }
+                }, function (err, user) {
+                    if (err) {
+                        console.log(err)
+                        return;
+                    }
+                });
                 res.end(JSON.stringify({code: -1, msg: "很遗憾未中奖！"}));
             }
 
