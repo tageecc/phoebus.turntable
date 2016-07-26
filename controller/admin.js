@@ -112,7 +112,7 @@ router.post('/set-prize', adminRequired, function (req, res, next) {
         level: req.body.level,
         probability: req.body.probability,
         num: req.body.num
-    }
+    };
     Model.Prize.create(_data, function (err) {
         if (err) {
             console.log(err);
@@ -132,4 +132,23 @@ router.get('/join-game', adminRequired, function (req, res, next) {
     })
 });
 
+router.get('/winner-clear', adminRequired, function (req, res, next) {
+    Model.Winner.remove({}, function (err, count) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        res.end();
+    })
+});
+
+router.get('/user-clear', adminRequired, function (req, res, next) {
+    Model.User.remove({}, function (err, count) {
+        if (err) {
+            console.log(err);
+            return;
+        }
+        res.end();
+    })
+});
 module.exports = router;
