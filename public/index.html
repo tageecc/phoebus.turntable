@@ -137,7 +137,7 @@
     </div>
     <div class="the-code">
         <h3>长按复制您的兑奖券</h3>
-        <span class="code css" id="get_number">XaDP09cMkE</span>
+        <p class="code css" id="get_number">XaDP09cMkE</p>
     </div>
     <span class="close">×</span>
 
@@ -145,13 +145,13 @@
 </div>
 <script>
 //测试：数据清空
-localStorage.clear();
+//localStorage.clear();
 
 //相关变量
 //OPEN-ID
 var OPEN_ID = document.querySelector('meta[name="openid"]').getAttribute('content');
 //是否已经抽中过了
-var IS_AWARDED = (localStorage.getItem('IS_AWARDED') != null);
+var IS_AWARDED = (localStorage.getItem('IS_AWARDED2') != null);
 //抽奖次数
 var LUCKY_TIMES;
 //音乐
@@ -202,7 +202,7 @@ $(document).ready(function () {
     if (IS_AWARDED) {
         //如果之前中过奖了
         $('.mask').show();
-        var award = JSON.parse(localStorage.getItem('IS_AWARDED'));
+        var award = JSON.parse(localStorage.getItem('IS_AWARDED2'));
         var pn = '';
         switch (award.data.prize) {
             case 1:
@@ -295,7 +295,7 @@ $('#form_submit').click(function (e) {
                 ucell: ucellVal,
                 uaddr: uaddrVal
             }, success: function () {
-                localStorage.setItem('isUserSaved', 'true');
+                localStorage.setItem('isUserSaved2', 'true');
                 $('.mask').hide();
                 $('.mask-content').hide();
                 $('#lucky_begin').trigger('click');
@@ -336,7 +336,7 @@ $('#lucky_begin').click(function (e) {
         //可继续点击而且点击次数少于 2 次
         CLICKABLE = false;
 
-        if (localStorage.getItem('isUserSaved') == null) {
+        if (localStorage.getItem('isUserSaved2') == null) {
             //如果用户没输入过信息
             userInfoModelShow();
         } else {
@@ -397,7 +397,7 @@ $('#lucky_begin').click(function (e) {
                             '-o-transition': '-o-transform ease-out ' + during_time + 's'
                         });
 
-                        localStorage.setItem('IS_AWARDED', JSON.stringify(data));
+                        localStorage.setItem('IS_AWARDED2', JSON.stringify(data));
 
                         setTimeout(function () {
                             CLICKABLE = true;
