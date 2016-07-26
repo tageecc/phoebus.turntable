@@ -32,8 +32,8 @@
         <img class="turntable" src="http://oaqy0fx2b.bkt.clouddn.com/turntable-bottom.png"/>
     </div>
     <div class="section main-bg css" data-anchor="two">
-        <img class="fixed-bg" data-src="/img/main-bg-2.png"/>
-        <img class="xydzp-2" data-src="/img/xydzp.png"/>
+        <img class="fixed-bg" data-src="http://oaqy0fx2b.bkt.clouddn.com/main-bg-2.png"/>
+        <img class="xydzp-2" data-src="http://oaqy0fx2b.bkt.clouddn.com/xydzp.png"/>
 
         <div class="turntable-container">
             <img class="turntable-cursor css" data-src="http://oaqy0fx2b.bkt.clouddn.com/turntable-cursor.png"/>
@@ -55,8 +55,12 @@
         </div>
     </div>
 </div>
-<div class="mask"></div>
+<div class="mask">
+</div>
 <div class="mask-content" id="information">
+
+    <p class="info-para"><strong>惠博美业</strong>携手<strong>《不一样的偶像》</strong>为您送礼了～
+        <br/>节目26号晚7.30将在优酷开播，跟我们一起边看节目边玩转盘吧～</p>
 
     <h2 class="info-header">活动规则 /</h2>
 
@@ -76,7 +80,7 @@
 
     <h2 class="info-header">活动时间 /</h2>
 
-    <p class="info-para">2016年7月23日--2016年7月28日</p>
+    <p class="info-para">2016年7月26日--2016年7月28日</p>
     <br/>
 
     <h2 class="info-header">主办单位 /</h2>
@@ -91,6 +95,7 @@
         每人每日有2次抽奖机会<br/>
         获奖后凭兑奖券联系活动主办单位即可兑奖
     </p>
+    <span class="close">×</span>
 
 </div>
 <div class="mask-content" id="user_form">
@@ -132,39 +137,55 @@
     </div>
     <div class="the-code">
         <h3>长按复制您的兑奖券</h3>
-        <span class="code" id="get_number">XaDP09cMkE</span>
+        <p class="code css" id="get_number">XaDP09cMkE</p>
     </div>
+    <span class="close">×</span>
+
     <!--<a class="follow" href="#">兑奖请先关注我们</a>-->
 </div>
 <script>
-localStorage.clear();
-var OPENID = document.querySelector('meta[name="openid"]').getAttribute('content');
-var userSaved = (localStorage.getItem('isUserSaved') != null);
-var clickable = true;
+//测试：数据清空
+//localStorage.clear();
 
-var date = new Date();
-var DATEKEY = date.getFullYear() + '' + (date.getMonth() + 1) + '' + date.getDate();
-if (!localStorage.getItem(DATEKEY)) {
-    console.log('init');
-    localStorage.setItem(DATEKEY, 0);
-}
-
+//相关变量
+//OPEN-ID
+var OPEN_ID = document.querySelector('meta[name="openid"]').getAttribute('content');
+//是否已经抽中过了
+var IS_AWARDED = (localStorage.getItem('IS_AWARDED2') != null);
+//抽奖次数
 var LUCKY_TIMES;
-function getLuckyTimes() {
-    return Number(localStorage.getItem(DATEKEY));
-}
-
-function setLuckyTimes(times) {
-    localStorage.setItem(DATEKEY, times);
-}
-
-$('.mask').click(function () {
-    if ($('#prize_block').is(':visible') || $('#information').is(':visible')) {
-        $('.mask').hide();
-        $('.mask-content').hide();
-    }
-});
+//音乐
 var audio = document.getElementById('audio');
+//是否能继续点击
+var CLICKABLE = true;
+//转圈flag
+var randomFlag = true;
+
+//每天只能抽两次奖，相关设置
+var date = new Date();
+var DATE_KEY = date.getFullYear() + '' + (date.getMonth() + 1) + '' + date.getDate();
+if (localStorage.getItem(DATE_KEY) == null) {
+    //说明今天第一次抽奖
+    localStorage.setItem(DATE_KEY, 0);
+}
+
+//获取抽奖次数
+function getLuckyTime() {
+    return Number(localStorage.getItem(DATE_KEY))
+}
+//设置抽奖次数
+function setLuckyTime(t) {
+    localStorage.setItem(DATE_KEY, t);
+}
+
+//点击关闭遮罩
+$('.close').click(function (e) {
+    e.preventDefault();
+    $('.mask').hide();
+    $('.mask-content').hide();
+});
+
+//播放音乐的图片
 $('#play_img').click(function () {
     var isPlaying = $(this).attr('data-play');
     if (isPlaying == '1') {
@@ -175,10 +196,32 @@ $('#play_img').click(function () {
         $(this).attr('data-play', '1').addClass('turning');
     }
 });
-$(document).ready(function () {
-    sessionStorage.clear();
 
-    var width = $('.turntable').css('width').split('px')[0];
+$(document).ready(function () {
+
+    if (IS_AWARDED) {
+        //如果之前中过奖了
+        $('.mask').show();
+        var award = JSON.parse(localStorage.getItem('IS_AWARDED2'));
+        var pn = '';
+        switch (award.data.prize) {
+            case 1:
+                pn = '一';
+                break;
+            case 2:
+                pn = '二';
+                break;
+            case 3:
+                pn = '三';
+                break;
+        }
+        $('#prize_name').text(pn);
+        $('#prize_img').attr('src', 'http://oaqy0fx2b.bkt.clouddn.com/prize_' + award.data.prize + '.png');
+        $('#get_number').text(award.data.token);
+        $('#prize_block').show();
+    }
+
+    var width = parseInt($('.turntable').css('width'));
     $('.turntable').css('bottom', (30 - width) + 'px');
 
     $('#fullpage').fullpage({
@@ -208,6 +251,7 @@ $(document).ready(function () {
         }
     });
 });
+
 $('#ugender').click(function () {
     var checked = $(this).prop('checked');
     if (checked) {
@@ -242,21 +286,22 @@ $('#form_submit').click(function (e) {
     }
     if (nextable) {
         $.ajax({
-            url: '/user/' + OPENID,
+            url: '/user/' + OPEN_ID,
             method: 'POST',
             dataType: 'json',
             data: {
-                uname: $('#uname').val(),
+                uname: unameVal,
                 ugender: $('#ugender').is(':checked') ? '男' : '女',
-                ucell: $('#ucell').val(),
-                uaddr: $('#uaddr').val()
-            }, success: function (data) {
-                localStorage.setItem('isUserSaved', 'true');
+                ucell: ucellVal,
+                uaddr: uaddrVal
+            }, success: function () {
+                localStorage.setItem('isUserSaved2', 'true');
                 $('.mask').hide();
                 $('.mask-content').hide();
                 $('#lucky_begin').trigger('click');
             }, error: function (err) {
-                alert('对不起，服务器出了点小故障。')
+                alert('对不起，服务器出了点小故障。');
+                console.error(err);
             }
         })
     } else {
@@ -270,20 +315,16 @@ $('#information').click(function (e) {
     $('#information').hide();
 });
 
+//显示活动规则
 $('#trigger_info').click(function (e) {
     e.preventDefault();
     $('.mask').show();
     $('#information').show();
 });
 
-$('#get_number').on('copy', function () {
-    $('.mask').hide();
-    $('#prize_block').hide();
-    alert('兑奖券已复制');
-});
-
 function userInfoModelShow() {
     $('.mask').show();
+    CLICKABLE = true;
     $('.mask-content').hide();
     $('#user_form').show();
 }
@@ -291,24 +332,22 @@ function userInfoModelShow() {
 $('#lucky_begin').click(function (e) {
     e.preventDefault();
 
-    if (clickable && Number(getLuckyTimes()) < 2) {
-        console.log('in');
-        clickable = false;
-        setLuckyTimes(Number(getLuckyTimes()) + 1);
+    if (CLICKABLE && Number(getLuckyTime()) < 2) {
+        //可继续点击而且点击次数少于 2 次
+        CLICKABLE = false;
 
-        if (!userSaved) {
+        if (localStorage.getItem('isUserSaved2') == null) {
             //如果用户没输入过信息
-            clickable = true;
             userInfoModelShow();
-            setLuckyTimes(Number(getLuckyTimes()) - 1);
         } else {
             //这时候转盘开始转
+            setLuckyTime(Number(getLuckyTime()) + 1);
             $.ajax({
-                url: "/user/" + OPENID + "/lottery",
+                url: "/user/" + OPEN_ID + "/lottery",
                 success: function (data) {
 
                     data = JSON.parse(data);
-                    var during_time = 1;
+                    var during_time = 4;
                     var angle = {
                         "-1": [157.5, 292.5],
                         "1": [22.5],
@@ -319,12 +358,11 @@ $('#lucky_begin').click(function (e) {
                     var targetAngle,
                             randomCircle = Math.ceil(Math.random() * 6),
                             rotateAngle = 0;
-                    var randomFlag = !randomCircle && true;
 
                     if (data.code == -1) {
                         targetAngle = angle[data.code][Math.floor(Math.random() * angle[data.code].length)];
                         rotateAngle = rotateAngle - randomCircle * 360 * (randomFlag ? 2 : 10) - targetAngle - rotateAngle % 360;
-                        console.log(rotateAngle);
+                        randomFlag = !randomFlag;
 
                         $('#zhuanpan').css({
                             'transform': 'rotate(' + rotateAngle + 'deg)',
@@ -339,12 +377,13 @@ $('#lucky_begin').click(function (e) {
                         });
                         setTimeout(function () {
                             alert(data.msg);
-                            clickable = true;
+                            CLICKABLE = true;
                         }, (during_time + 0.2) * 1000);
 
                     } else {
                         targetAngle = angle[data.data.prize][Math.floor(Math.random() * angle[data.data.prize].length)];
                         rotateAngle = 0 - randomCircle * 360 * (randomFlag ? 5 : 10) - targetAngle - rotateAngle % 360;
+                        randomFlag = !randomFlag;
 
                         $('#zhuanpan').css({
                             'transform': 'rotate(' + rotateAngle + 'deg)',
@@ -358,8 +397,10 @@ $('#lucky_begin').click(function (e) {
                             '-o-transition': '-o-transform ease-out ' + during_time + 's'
                         });
 
+                        localStorage.setItem('IS_AWARDED2', JSON.stringify(data));
+
                         setTimeout(function () {
-                            clickable = true;
+                            CLICKABLE = true;
                             $('.mask').show();
                             $('.mask-content').hide();
 
@@ -387,7 +428,7 @@ $('#lucky_begin').click(function (e) {
                 }
             })
         }
-    } else if (getLuckyTimes() >= 2) {
+    } else if (getLuckyTime() >= 2) {
         $('#lucky_begin').text('今日次数已用完，请明天再来')
     }
 });
