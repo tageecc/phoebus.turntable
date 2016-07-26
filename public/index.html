@@ -137,6 +137,7 @@
     </div>
     <div class="the-code">
         <h3>长按复制您的兑奖券</h3>
+
         <p class="code css" id="get_number">XaDP09cMkE</p>
     </div>
     <span class="close">×</span>
@@ -331,106 +332,106 @@ function userInfoModelShow() {
 
 $('#lucky_begin').click(function (e) {
     e.preventDefault();
+    $.ajax({
+        url: "/user/" + OPEN_ID + "/lottery",
+        success: function (data) {
 
-    if (CLICKABLE && Number(getLuckyTime()) < 2) {
-        //可继续点击而且点击次数少于 2 次
-        CLICKABLE = false;
+            data = JSON.parse(data);
+            var during_time = 4;
+            var angle = {
+                "-1": [157.5, 292.5],
+                "1": [22.5],
+                "2": [67.5, 202.5],
+                "3": [112.5, 247.5, 337.5]
+            };
 
-        if (localStorage.getItem('isUserSaved2') == null) {
-            //如果用户没输入过信息
-            userInfoModelShow();
-        } else {
-            //这时候转盘开始转
-            setLuckyTime(Number(getLuckyTime()) + 1);
-            $.ajax({
-                url: "/user/" + OPEN_ID + "/lottery",
-                success: function (data) {
+            var targetAngle,
+                    randomCircle = Math.ceil(Math.random() * 6),
+                    rotateAngle = 0;
 
-                    data = JSON.parse(data);
-                    var during_time = 4;
-                    var angle = {
-                        "-1": [157.5, 292.5],
-                        "1": [22.5],
-                        "2": [67.5, 202.5],
-                        "3": [112.5, 247.5, 337.5]
-                    };
+            if (data.code < 0) {
+                targetAngle = angle[data.code][Math.floor(Math.random() * angle[data.code].length)];
+                rotateAngle = rotateAngle - randomCircle * 360 * (randomFlag ? 2 : 10) - targetAngle - rotateAngle % 360;
+                randomFlag = !randomFlag;
 
-                    var targetAngle,
-                            randomCircle = Math.ceil(Math.random() * 6),
-                            rotateAngle = 0;
+                $('#zhuanpan').css({
+                    'transform': 'rotate(' + rotateAngle + 'deg)',
+                    '-ms-transform': 'rotate(' + rotateAngle + 'deg)',
+                    '-webkit-transform': 'rotate(' + rotateAngle + 'deg)',
+                    '-moz-transform': 'rotate(' + rotateAngle + 'deg)',
+                    '-o-transform': 'rotate(' + rotateAngle + 'deg)',
+                    'transition': 'transform ease-out ' + during_time + 's',
+                    '-moz-transition': '-moz-transform ease-out ' + during_time + 's',
+                    '-webkit-transition': '-webkit-transform ease-out ' + during_time + 's',
+                    '-o-transition': '-o-transform ease-out ' + during_time + 's'
+                });
+                setTimeout(function () {
+                    alert(data.msg);
+                    CLICKABLE = true;
+                }, (during_time + 0.2) * 1000);
 
-                    if (data.code == -1) {
-                        targetAngle = angle[data.code][Math.floor(Math.random() * angle[data.code].length)];
-                        rotateAngle = rotateAngle - randomCircle * 360 * (randomFlag ? 2 : 10) - targetAngle - rotateAngle % 360;
-                        randomFlag = !randomFlag;
+            } else {
+                targetAngle = angle[data.data.prize][Math.floor(Math.random() * angle[data.data.prize].length)];
+                rotateAngle = 0 - randomCircle * 360 * (randomFlag ? 5 : 10) - targetAngle - rotateAngle % 360;
+                randomFlag = !randomFlag;
 
-                        $('#zhuanpan').css({
-                            'transform': 'rotate(' + rotateAngle + 'deg)',
-                            '-ms-transform': 'rotate(' + rotateAngle + 'deg)',
-                            '-webkit-transform': 'rotate(' + rotateAngle + 'deg)',
-                            '-moz-transform': 'rotate(' + rotateAngle + 'deg)',
-                            '-o-transform': 'rotate(' + rotateAngle + 'deg)',
-                            'transition': 'transform ease-out ' + during_time + 's',
-                            '-moz-transition': '-moz-transform ease-out ' + during_time + 's',
-                            '-webkit-transition': '-webkit-transform ease-out ' + during_time + 's',
-                            '-o-transition': '-o-transform ease-out ' + during_time + 's'
-                        });
-                        setTimeout(function () {
-                            alert(data.msg);
-                            CLICKABLE = true;
-                        }, (during_time + 0.2) * 1000);
+                $('#zhuanpan').css({
+                    'transform': 'rotate(' + rotateAngle + 'deg)',
+                    '-ms-transform': 'rotate(' + rotateAngle + 'deg)',
+                    '-webkit-transform': 'rotate(' + rotateAngle + 'deg)',
+                    '-moz-transform': 'rotate(' + rotateAngle + 'deg)',
+                    '-o-transform': 'rotate(' + rotateAngle + 'deg)',
+                    'transition': 'transform ease-out ' + during_time + 's',
+                    '-moz-transition': '-moz-transform ease-out ' + during_time + 's',
+                    '-webkit-transition': '-webkit-transform ease-out ' + during_time + 's',
+                    '-o-transition': '-o-transform ease-out ' + during_time + 's'
+                });
 
-                    } else {
-                        targetAngle = angle[data.data.prize][Math.floor(Math.random() * angle[data.data.prize].length)];
-                        rotateAngle = 0 - randomCircle * 360 * (randomFlag ? 5 : 10) - targetAngle - rotateAngle % 360;
-                        randomFlag = !randomFlag;
+                localStorage.setItem('IS_AWARDED2', JSON.stringify(data));
 
-                        $('#zhuanpan').css({
-                            'transform': 'rotate(' + rotateAngle + 'deg)',
-                            '-ms-transform': 'rotate(' + rotateAngle + 'deg)',
-                            '-webkit-transform': 'rotate(' + rotateAngle + 'deg)',
-                            '-moz-transform': 'rotate(' + rotateAngle + 'deg)',
-                            '-o-transform': 'rotate(' + rotateAngle + 'deg)',
-                            'transition': 'transform ease-out ' + during_time + 's',
-                            '-moz-transition': '-moz-transform ease-out ' + during_time + 's',
-                            '-webkit-transition': '-webkit-transform ease-out ' + during_time + 's',
-                            '-o-transition': '-o-transform ease-out ' + during_time + 's'
-                        });
+                setTimeout(function () {
+                    CLICKABLE = true;
+                    $('.mask').show();
+                    $('.mask-content').hide();
 
-                        localStorage.setItem('IS_AWARDED2', JSON.stringify(data));
-
-                        setTimeout(function () {
-                            CLICKABLE = true;
-                            $('.mask').show();
-                            $('.mask-content').hide();
-
-                            var pn = '';
-                            switch (data.data.prize) {
-                                case 1:
-                                    pn = '一';
-                                    break;
-                                case 2:
-                                    pn = '二';
-                                    break;
-                                case 3:
-                                    pn = '三';
-                                    break;
-                            }
-                            $('#prize_name').text(pn);
-                            $('#prize_img').attr('src', 'http://oaqy0fx2b.bkt.clouddn.com/prize_' + data.data.prize + '.png');
-                            $('#get_number').text(data.data.token);
-                            $('#prize_block').show();
-
-                        }, (during_time + 0.2) * 1000);
+                    var pn = '';
+                    switch (data.data.prize) {
+                        case 1:
+                            pn = '一';
+                            break;
+                        case 2:
+                            pn = '二';
+                            break;
+                        case 3:
+                            pn = '三';
+                            break;
                     }
-                }, error: function (err) {
-                    alert(err.toString())
-                }
-            })
+                    $('#prize_name').text(pn);
+                    $('#prize_img').attr('src', 'http://oaqy0fx2b.bkt.clouddn.com/prize_' + data.data.prize + '.png');
+                    $('#get_number').text(data.data.token);
+                    $('#prize_block').show();
+
+                }, (during_time + 0.2) * 1000);
+            }
+        }, error: function (err) {
+            alert(err.toString())
         }
-    } else if (getLuckyTime() >= 2) {
-        $('#lucky_begin').text('今日次数已用完，请明天再来')
-    }
+    })
+//    if (CLICKABLE && Number(getLuckyTime()) < 2) {
+//        //可继续点击而且点击次数少于 2 次
+//        CLICKABLE = false;
+//
+//        if (localStorage.getItem('isUserSaved2') == null) {
+//            //如果用户没输入过信息
+//            userInfoModelShow();
+//        } else {
+//            //这时候转盘开始转
+//            setLuckyTime(Number(getLuckyTime()) + 1);
+//
+//        }
+//    } else if (getLuckyTime() >= 2) {
+//        $('#lucky_begin').text('今日次数已用完，请明天再来')
+//    }
 });
 </script>
 </body>
