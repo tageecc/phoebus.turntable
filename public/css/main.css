@@ -13,6 +13,12 @@ body {
     -webkit-font-smoothing: antialiased;
 }
 
+strong {
+    font-weight: bold;
+    margin: 0 2px;
+    font-size: 1.4em;
+}
+
 .css {
     -webkit-transform: translate3d(0, 0, 0);
     -moz-transform: translate3d(0, 0, 0);
@@ -381,8 +387,10 @@ section.form .block input[type=checkbox] {
     font-size: 1em;
 }
 
-.mask-content .info-header:first-child {
+.mask-content .info-para:first-child {
     margin-top: 40px;
+    margin-bottom: 20px;
+    opacity: 1;
 }
 
 .mask-content .info-para {
