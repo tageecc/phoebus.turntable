@@ -34,6 +34,7 @@ router.post('/login', function (req, res, next) {
 router.get('/winner-list', adminRequired, function (req, res, next) {
     Model.Winner.find()
         .populate('user prize')
+        .sort({'create_at':-1})
         .exec(function (err, winners) {
             if (err) {
                 console.log(err);
@@ -129,23 +130,23 @@ router.get('/join-game', adminRequired, function (req, res, next) {
     })
 });
 
-router.get('/winner-clear', adminRequired, function (req, res, next) {
-    Model.Winner.remove({}, function (err, count) {
-        if (err) {
-            console.log(err);
-            return;
-        }
-        res.end();
-    })
-});
-
-router.get('/user-clear', adminRequired, function (req, res, next) {
-    Model.User.remove({}, function (err, count) {
-        if (err) {
-            console.log(err);
-            return;
-        }
-        res.end();
-    })
-});
+// router.get('/winner-clear', adminRequired, function (req, res, next) {
+//     Model.Winner.remove({}, function (err, count) {
+//         if (err) {
+//             console.log(err);
+//             return;
+//         }
+//         res.end();
+//     })
+// });
+//
+// router.get('/user-clear', adminRequired, function (req, res, next) {
+//     Model.User.remove({}, function (err, count) {
+//         if (err) {
+//             console.log(err);
+//             return;
+//         }
+//         res.end();
+//     })
+// });
 module.exports = router;

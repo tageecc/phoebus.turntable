@@ -4,7 +4,7 @@ var Schema = mongoose.Schema;
 var AdminSchema = new mongoose.Schema({
     name: String,
     passwd: String
-})
+});
 var Admin = mongoose.model('Admin', AdminSchema);
 
 var UserSchema = new mongoose.Schema({
@@ -27,7 +27,7 @@ var UserSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     }
-})
+});
 var User = mongoose.model('User', UserSchema);
 
 var PrizeSchema = new mongoose.Schema({
@@ -35,7 +35,7 @@ var PrizeSchema = new mongoose.Schema({
     level: Number,
     probability: Number,//概率分子，分母10000
     num: Number
-})
+});
 var Prize = mongoose.model('Prize', PrizeSchema);
 
 var WinnerSchema = new mongoose.Schema({
@@ -46,7 +46,7 @@ var WinnerSchema = new mongoose.Schema({
         type: Date,
         default: Date.now()
     }
-})
+});
 var Winner = mongoose.model('Winner', WinnerSchema);
 
 exports.Admin=Admin;
