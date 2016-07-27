@@ -62,8 +62,13 @@ router.get('/:openid/lottery', function (req, res, next) {
             console.error(err);
             return;
         }
+
         if (!user) {
-            res.end(JSON.stringify({code: -53, msg: '用户不存在'}));
+            res.end(JSON.stringify({code: -53, msg: '用户不存在！'}));
+            return;
+        }
+        if(!user.username||user.username==""){
+            res.end(JSON.stringify({code: -54, msg: '请先填写用户信息！'}));
             return;
         }
         if (user.lottery_number < 1) {
