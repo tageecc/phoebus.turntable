@@ -242,14 +242,10 @@
             },
             onLeave: function (index, nextIndex, direction) {
                 if (index == 1 && direction == "down") {
-                    var isFirstViewed = !!localStorage.getItem('isFirstViewed');
-                    if (!isFirstViewed) {
-                        localStorage.setItem('isFirstViewed', 'true');
-                        setTimeout(function () {
-                            $('.mask').show();
-                            $('#information').show();
-                        }, 400);
-                    }
+                    setTimeout(function () {
+                        $('.mask').show();
+                        $('#information').show();
+                    }, 400);
                 }
             }
         });
