@@ -1,11 +1,9 @@
 var express = require('express');
 var request = require('request');
-var qs = require('querystring');
 var Model = require('../model/model');
 var util = require('../util/common');
 var router = express.Router();
 
-var token = "phoebus4wechat";
 
 router.get('/', function (req, res, next) {
 });
@@ -31,7 +29,7 @@ router.get('/:openid', function (req, res, next) {
                             console.log(err);
                         }
                         else {
-                            console.log('index', openid)
+                            console.log('index', openid);
                             res.render('index', {openid: result.openid});
                         }
                     })
@@ -48,7 +46,7 @@ router.post('/:openid', function (req, res, next) {
         sex: req.body.ugender,
         phone: req.body.ucell,
         address: req.body.uaddr
-    }
+    };
     Model.User.update({openid: req.params.openid}, _data, function (err, user) {
         if (err) console.error(err);
         else {
@@ -58,7 +56,7 @@ router.post('/:openid', function (req, res, next) {
 });
 
 router.get('/:openid/lottery', function (req, res, next) {
-    var _openid = req.params.openid
+    var _openid = req.params.openid;
     Model.User.findOne({openid: _openid}, function (err, user) {
         if (err) {
             console.error(err);
@@ -81,10 +79,10 @@ router.get('/:openid/lottery', function (req, res, next) {
                 }
             }, function (err, user) {
                 if (err) {
-                    console.log(err)
+                    console.log(err);
                     return;
                 }
-            })
+            });
             return;
         }
         Model.Prize.find({}, function (err, prizes) {
@@ -101,10 +99,10 @@ router.get('/:openid/lottery', function (req, res, next) {
                     }
                 }, function (err, user) {
                     if (err) {
-                        console.log(err)
+                        console.log(err);
                         return;
                     }
-                })
+                });
                 return;
             }
             var isWinner = false;
@@ -125,7 +123,7 @@ router.get('/:openid/lottery', function (req, res, next) {
                             console.log(err);
                             return;
                         }
-                    })
+                    });
                     Model.User.update({openid: _openid}, {
                         '$inc': {
                             'lottery_number': -1,
@@ -133,17 +131,17 @@ router.get('/:openid/lottery', function (req, res, next) {
                         }
                     }, function (err, user) {
                         if (err) {
-                            console.log(err)
+                            console.log(err);
                             return;
                         }
-                    })
+                    });
                     Model.Prize.update({level: v.level}, {
                         '$inc': {
                             'num': -1
                         }
                     }, function (err, user) {
                         if (err) {
-                            console.log(err)
+                            console.log(err);
                             return;
                         }
                     })
@@ -156,7 +154,7 @@ router.get('/:openid/lottery', function (req, res, next) {
                     }
                 }, function (err, user) {
                     if (err) {
-                        console.log(err)
+                        console.log(err);
                         return;
                     }
                 });

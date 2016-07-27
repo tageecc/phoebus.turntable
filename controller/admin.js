@@ -15,16 +15,13 @@ function adminRequired(req, res, next) {
 router.post('/login', function (req, res, next) {
     var _username = req.body.username;
     var _password = req.body.password;
-    console.log(_username, _password)
     Model.Admin.findOne({name: _username, passwd: _password}, function (err, admin) {
-        console.log(arguments)
         if (err) {
             console.error(err);
             return;
         }
         if (admin) {
             req.session.admin = admin;
-            console.log("req.session.admin:" + req.session.admin)
             res.redirect('/admin.html');
         } else {
             req.session.admin = null;
@@ -76,7 +73,7 @@ router.get('/winner-file', adminRequired, function (req, res, next) {
                         '奖品名称': v.prize.name,
                         '奖品等级': v.prize.level
                     })
-                })
+                });
                 var csv = json2csv({data: data, fields: fields});
                 // 设置 header 使浏览器下载文件
                 res.setHeader('Content-Description', 'File Transfer');
