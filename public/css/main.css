@@ -387,9 +387,8 @@ section.form .block input[type=checkbox] {
     font-size: 1em;
 }
 
-.mask-content .info-para:first-child {
+.mask-content .info-header:first-child {
     margin-top: 40px;
-    margin-bottom: 20px;
     opacity: 1;
 }
 
