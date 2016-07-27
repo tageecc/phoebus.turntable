@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="css/theme.css"/>
     <script src="js/jquery.min.js"></script>
     <script src="js/bootstrap.min.js"></script>
+    <script src="js/lodash.js"></script>
 </head>
 <body>
 <div class="container-fluid">
@@ -186,8 +187,23 @@
                     $(winnerTable).append(prizeRow);
                 });
 
+                var luckyString = '';
+                luckyString = '  中奖人数：'
+                + obj.length
+                + '  一等奖：'
+                + _.filter(obj, function (p) {
+                    return p.prize.level == 1
+                }).length
+                + '  二等奖：'
+                + _.filter(obj, function (p) {
+                    return p.prize.level == 2
+                }).length
+                + '  三等奖：'
+                + _.filter(obj, function (p) {
+                    return p.prize.level == 3
+                }).length;
                 $('#panel-136528').empty()
-                        .append($('<p>').clone().text('中奖者名单'))
+                        .append($('<p>').clone().text('中奖者名单' + luckyString))
                         .append(winnerTable)
                         .append($('<a>').clone().attr('href', 'admin/winner-file')
                                 .text('下载CVS'));
