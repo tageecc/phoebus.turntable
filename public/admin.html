@@ -10,7 +10,6 @@
 </head>
 <body>
 <div class="container-fluid">
-    <button id="clear_win" class="btn">测试：清空中奖</button>
     <div class="row-fluid">
         <div class="span1">
         </div>
@@ -92,25 +91,6 @@
     </div>
 </div>
 <script>
-    $('#clear_win').click(function (e) {
-        e.preventDefault();
-        $.ajax({
-            url: 'admin/winner-clear',
-            success: function () {
-                $.ajax({
-                    url: 'admin/user-clear',
-                    success: function () {
-                        alert('数据已清空');
-                    }, error: function (err) {
-                        alert('清空出现故障：2');
-                    }
-                });
-            }, error: function (err) {
-                alert('清空出现故障：1');
-            }
-        })
-    });
-
     var row = $('<tr>');
     var header = $('<th>');
     var cell = $('<td>');
@@ -198,7 +178,7 @@
                                     (date.getMonth() + 1) + '/' +
                                     date.getDate() + ' ' +
                                     date.getHours() + ':' +
-                                    date.getMinutes() + ':' +
+                                    (date.getMinutes().toString().length > 1 ? date.getMinutes() : '0' + date.getMinutes()) + ':' +
                                     date.getSeconds()
                             )
                     );

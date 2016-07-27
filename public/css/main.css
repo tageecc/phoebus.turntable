@@ -619,3 +619,11 @@ section.form .block input[type=number] {
         -webkit-transform: translateY(0);
     }
 }
+
+#prize_name {
+    width: 80%;
+    text-align: center;
+    color: white;
+    font-size: 1em;
+    margin: 0 auto 1em;
+}

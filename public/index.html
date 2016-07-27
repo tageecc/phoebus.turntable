@@ -63,11 +63,12 @@
     <!--<br/>节目26号晚7.30将在优酷开播，跟我们一起边看节目边玩转盘吧～</p>-->
     <h2 class="info-header">活动说明</h2>
 
-    <p class="info-para"> 为庆祝《不一样的偶像》开播当天关注量超过500万，惠博美业携手《不一样的偶像》回馈各位粉丝啦!</p>
+    <p class="info-para">为庆祝《不一样的偶像》开播当天关注量超过500万，惠博美业携手《不一样的偶像》回馈各位粉丝啦!
+        想和超人气主持天团、全国最红网红近距离接触吗？即刻动动手指参与大转盘吧！</p>
     <br>
     <h2 class="info-header">活动规则 /</h2>
 
-    <p class="info-para">点击开始，填写收货信息，提交后即可开始您的转盘之旅</p>
+    <p class="info-para">点击开始，填写个人信息，提交后即可开始您的转盘之旅</p>
     <br/>
 
     <h2 class="info-header">活动奖励 /</h2>
@@ -92,7 +93,7 @@
 
     <p class="info-para">主办单位在法律允许的范围内拥有活动解释权</p>
     <br/>
-    <h2 class="info-header">活动及兑奖说明</h2>
+    <h2 class="info-header">活动及兑奖说明/</h2>
     <p class="info-para">
         每人每日有2次抽奖机会<br>
         一等奖中奖后工作人员会电话联系您，二三等奖中奖后我们会根据您所填联系方式直接邮寄奖品给您。
@@ -137,6 +138,7 @@
         <div class="glowing"></div>
         <img id="prize_img" src=""/>
     </div>
+    <p id="prize_title">adfasdfsadfsdfsadfsadf</p>
     <div class="the-code">
         <h3>长按复制您的兑奖券</h3>
 
@@ -159,27 +161,8 @@
     var LUCKY_TIMES;
     //音乐
     var audio = document.getElementById('audio');
-    //是否能继续点击
-    var CLICKABLE = true;
     //转圈flag
     var randomFlag = true;
-
-    //每天只能抽两次奖，相关设置
-    var date = new Date();
-    var DATE_KEY = date.getFullYear() + '' + (date.getMonth() + 1) + '' + date.getDate();
-    if (localStorage.getItem(DATE_KEY) == null) {
-        //说明今天第一次抽奖
-        localStorage.setItem(DATE_KEY, 0);
-    }
-
-    //获取抽奖次数
-    function getLuckyTime() {
-        return Number(localStorage.getItem(DATE_KEY))
-    }
-    //设置抽奖次数
-    function setLuckyTime(t) {
-        localStorage.setItem(DATE_KEY, t);
-    }
 
     //点击关闭遮罩
     $('.close').click(function (e) {
@@ -219,6 +202,7 @@
                     break;
             }
             $('#prize_name').text(pn);
+            $('#prize_title').text(award.data.prizeName);
             $('#prize_img').attr('src', 'http://oaqy0fx2b.bkt.clouddn.com/prize_' + award.data.prize + '.png');
             $('#get_number').text(award.data.token);
             $('#prize_block').show();
@@ -242,10 +226,13 @@
             },
             onLeave: function (index, nextIndex, direction) {
                 if (index == 1 && direction == "down") {
-                    setTimeout(function () {
-                        $('.mask').show();
-                        $('#information').show();
-                    }, 400);
+                    if (sessionStorage.getItem('isFirstView') == null) {
+                        setTimeout(function () {
+                            $('.mask').show();
+                            $('#information').show();
+                            sessionStorage.setItem('isFirstView', 'true')
+                        }, 400);
+                    }
                 }
             }
         });
@@ -294,7 +281,6 @@
                     ucell: ucellVal,
                     uaddr: uaddrVal
                 }, success: function () {
-                    localStorage.setItem('isUserSaved2', 'true');
                     $('.mask').hide();
                     $('.mask-content').hide();
                     $('#lucky_begin').trigger('click');
@@ -323,7 +309,6 @@
 
     function userInfoModelShow() {
         $('.mask').show();
-        CLICKABLE = true;
         $('.mask-content').hide();
         $('#user_form').show();
     }
@@ -348,9 +333,21 @@
                         rotateAngle = 0;
 
                 if (data.code < 0) {
+                    switch (data.code) {
+                        case -3:
+                            alert(data.msg);
+                            return false;
+                            break;
+                        case -54:
+                            alert(data.msg);
+                            userInfoModelShow();
+                            return false;
+                            break;
+                    }
                     targetAngle = angle[data.code][Math.floor(Math.random() * angle[data.code].length)];
                     rotateAngle = rotateAngle - randomCircle * 360 * (randomFlag ? 2 : 10) - targetAngle - rotateAngle % 360;
                     randomFlag = !randomFlag;
+
 
                     $('#zhuanpan').css({
                         'transform': 'rotate(' + rotateAngle + 'deg)',
@@ -365,7 +362,6 @@
                     });
                     setTimeout(function () {
                         alert(data.msg);
-                        CLICKABLE = true;
                     }, (during_time + 0.2) * 1000);
 
                 } else {
@@ -388,7 +384,6 @@
                     localStorage.setItem('IS_AWARDED2', JSON.stringify(data));
 
                     setTimeout(function () {
-                        CLICKABLE = true;
                         $('.mask').show();
                         $('.mask-content').hide();
 
@@ -405,6 +400,7 @@
                                 break;
                         }
                         $('#prize_name').text(pn);
+                        $('#prize_title').text(data.data.prizeName);
                         $('#prize_img').attr('src', 'http://oaqy0fx2b.bkt.clouddn.com/prize_' + data.data.prize + '.png');
                         $('#get_number').text(data.data.token);
                         $('#prize_block').show();
@@ -415,21 +411,6 @@
                 alert(err.toString())
             }
         })
-//    if (CLICKABLE && Number(getLuckyTime()) < 2) {
-//        //可继续点击而且点击次数少于 2 次
-//        CLICKABLE = false;
-//
-//        if (localStorage.getItem('isUserSaved2') == null) {
-//            //如果用户没输入过信息
-//            userInfoModelShow();
-//        } else {
-//            //这时候转盘开始转
-//            setLuckyTime(Number(getLuckyTime()) + 1);
-//
-//        }
-//    } else if (getLuckyTime() >= 2) {
-//        $('#lucky_begin').text('今日次数已用完，请明天再来')
-//    }
     });
 </script>
 </body>
